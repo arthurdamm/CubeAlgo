@@ -4,13 +4,18 @@
 
 #include "CoreMinimal.h"
 
+#define N 3
 /**
  * 
  */
 class CUBEALGO_API CubeAlgorithm
 {
+private:
+	FVector cubes[N][N][N];
 public:
 	CubeAlgorithm();
 	~CubeAlgorithm();
 	void test();
+	void print();
+
 };
