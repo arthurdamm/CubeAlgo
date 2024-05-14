@@ -6,7 +6,9 @@
 CubeAlgorithm::CubeAlgorithm()
 {
     UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm()"));
+    init();
     test();
+    print();
 }
 
 CubeAlgorithm::~CubeAlgorithm()
@@ -32,22 +34,41 @@ void CubeAlgorithm::test() {
     UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::test()"));
 
     FVector vector = FVector(1, 0, 0);
+    FVector vecs = {FVector(1, 0, 0), FVector(-1, 0, 0), FVector(0, 1, 0), FVector(0, -1, 0), FVector(0, 0, 1), FVector(0, 0, -1)}
     FRotator rotator = FRotator(0, 90, 0);
     FMatrix rotationMatrix = FRotationMatrix(rotator);
     FVector rotatedVector = rotationMatrix.TransformVector(vector);
     UE_LOG(LogTemp, Error, TEXT("vvector: %s rotatedVector: %s"), *vector.ToString(), *rotatedVector.ToString());
-    PerformRotations();
+
+    for (int i = 0; i < vecs.size(); i++) {
+        vector = vecs[i];
+        rotatedVector = rotationMatrix.Tr
+        UE_LOG(LogTemp, Error, TEXT("vvector: %s rotatedVector: %s"), *vector.ToString(), *rotatedVector.ToString());
+    }
+    // PerformRotations();
 }
 
 void CubeAlgorithm::print() {
-    FString row = "";
+    UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::print()!"));
+    FString row;
     for (size_t z = 0; z < N; z++) {
-        for (size_t y = 0; y < N; y++) {    
+        for (size_t y = 0; y < N; y++) {
+            row = "";
             for (size_t x = 0; x < N; x++) {
                 row += cubes[x][y][z].ToString() + " ";
 
             }
             UE_LOG(LogTemp, Error, TEXT("%s"), *row);
+        }
+    }
+}
+
+void CubeAlgorithm::init() {
+    for (size_t z = 0; z < N; z++) {
+        for (size_t y = 0; y < N; y++) {    
+            for (size_t x = 0; x < N; x++) {
+                cubes[x][y][z] = FVector(1, 0, 0);
+            }
         }
     }
 }

@@ -17,5 +17,6 @@ public:
 	~CubeAlgorithm();
 	void test();
 	void print();
+	void init();
 
 };
