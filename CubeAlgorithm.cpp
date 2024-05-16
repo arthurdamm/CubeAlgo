@@ -34,16 +34,25 @@ void CubeAlgorithm::test() {
     UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::test()"));
 
     FVector vector = FVector(1, 0, 0);
-    FVector vecs = {FVector(1, 0, 0), FVector(-1, 0, 0), FVector(0, 1, 0), FVector(0, -1, 0), FVector(0, 0, 1), FVector(0, 0, -1)}
+    std::vector<FVector> vecs = {FVector(1, -1, 1), FVector(-1, -1, -1), FVector(0, 0, 1), FVector(1, 0, 1), FVector(0, 1, 0), FVector(0, 1, -1)};
+    std::vector<FRotator> rots = {FRotator(-90, 0, 0), FRotator(0, -90, 0), FRotator(0, 0, -90)};
     FRotator rotator = FRotator(0, 90, 0);
     FMatrix rotationMatrix = FRotationMatrix(rotator);
     FVector rotatedVector = rotationMatrix.TransformVector(vector);
-    UE_LOG(LogTemp, Error, TEXT("vvector: %s rotatedVector: %s"), *vector.ToString(), *rotatedVector.ToString());
+    UE_LOG(LogTemp, Error, TEXT("vector: %s rotatedVector: %s"), *vector.ToString(), *rotatedVector.ToString());
 
+    UE_LOG(LogTemp, Error, TEXT("vecs.size(): %d"), vecs.size());
     for (int i = 0; i < vecs.size(); i++) {
         vector = vecs[i];
-        rotatedVector = rotationMatrix.Tr
-        UE_LOG(LogTemp, Error, TEXT("vvector: %s rotatedVector: %s"), *vector.ToString(), *rotatedVector.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("for vector: %s"), *vector.ToString());
+        for (int j = 0; j < rots.size(); j++) {
+            rotator = rots[j];
+            rotationMatrix = FRotationMatrix(rotator);
+            rotatedVector = rotationMatrix.TransformVector(vector);
+            // UE_LOG(LogTemp, Warning, TEXT("rotationMatrix: %s"), *rotationMatrix.ToString());
+            UE_LOG(LogTemp, Error, TEXT("rotator: %s rotatedVector: %s"), *rotator.ToString(), *rotatedVector.ToString());
+        }
+        
     }
     // PerformRotations();
 }
