@@ -4,21 +4,52 @@
 #include "CubeActor.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
+
 #include "HAL/PlatformTime.h"
 
 // Sets default values
 ACubeActor::ACubeActor()
 {
+	UE_LOG(LogTemp, Error, TEXT("ACubeActor()!!!"));
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+    // Create a root component and set it as the root
+    USceneComponent* RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+    RootComponent = RootComp;
+    // Set the root component's mobility to Movable
+    RootComponent->SetMobility(EComponentMobility::Movable);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(CUBE_MESH);
     if (MeshObj.Succeeded())
     {
         CubeMesh = MeshObj.Object;
-        UE_LOG(LogTemp, Warning, TEXT("MeshObj: SUCCEEDED"));
+        UE_LOG(LogTemp, Warning, TEXT("MeshObj: SUCCEEDED!"));
     } else {
 		UE_LOG(LogTemp, Warning, TEXT("MeshObj: FAILED"));
+	}
+}
+
+void ACubeActor::print() {
+	UE_LOG(LogTemp, Warning, TEXT("ACubeActor::print()"));
+	for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+			FString row = "";
+            for (int k = 0; k < 3; k++)
+			{
+				row += "<(L: " + Cubes[i][j][k]->GetActorLocation().ToString() + ") (F: " + Cubes[i][j][k]->GetActorForwardVector().ToString()
+					+ ") (R: " + Cubes[i][j][k]->GetActorRotation().ToString() + ")>";
+				FVector forwardVector = Cubes[i][j][k]->GetActorForwardVector();
+				if (dtoi(forwardVector.X) != 1 || dtoi(forwardVector.X) != 0 || dtoi(forwardVector.X) != 0) {
+					UE_LOG(LogTemp, Error, TEXT("Foward Vector Changed!"));
+				}
+
+			}
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *row);
+		}
 	}
 }
 
@@ -32,6 +63,10 @@ void ACubeActor::BeginPlay()
 	FVector BasePosition = StartLocation;
 	UE_LOG(LogTemp, Warning, TEXT("---Starting CubeActor location: %s"), *BasePosition.ToString());
 
+    for (auto rotation : InstantRotations) {
+        algo.rotateLayer(rotation, 1);
+    }
+
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -39,6 +74,7 @@ void ACubeActor::BeginPlay()
             for (int k = 0; k < 3; k++)
             {
                 FVector Position = BasePosition + FVector(i * CubeEdgeLength, j * CubeEdgeLength, k * CubeEdgeLength);
+				FRotator Rotation = algo.cubes[i][j][k].facing.Rotation();
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.Owner = this;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -50,16 +86,18 @@ void ACubeActor::BeginPlay()
 					UE_LOG(LogTemp, Warning, TEXT("Spawned Cube at %s"), *Position.ToString());
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
+					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
+					// NewCube->SetActorForwardVector(algo.cubes[i][j][k].facing);
 
                     CubesVector.push_back(NewCube);
                     
                     if (j == 1 && k == 1) {
-                        NormalsAtLayer[0 + i] = FVector(1, 0, 0);
+                        NormalsAtLayer[0 + i] = FVector(-1, 0, 0);
                         CentersAtLayer[0 + i] = NewCube->GetActorLocation();
                         UE_LOG(LogTemp, Warning, TEXT("CentersAtLayer[%d][%d][%d]: %s"), i, j, k, *CentersAtLayer[0 + i].ToString());
                     }
                     if (i == 1 && k == 1) {
-                        NormalsAtLayer[3 + j] = FVector(0, 1, 0);
+                        NormalsAtLayer[3 + j] = FVector(0, -1, 0);
                         CentersAtLayer[3 + j] = NewCube->GetActorLocation();
                         UE_LOG(LogTemp, Warning, TEXT("CentersAtLayer[%d][%d][%d]: %s"), i, j, k, *CentersAtLayer[3 + j].ToString());
                     }
@@ -73,72 +111,16 @@ void ACubeActor::BeginPlay()
         }
     }
 
-    for (int layer = 0; layer <= 0; layer++) {
-        // RotationsQueue.Enqueue(2);
-        // RotationsQueue.Enqueue(4);
+    for (auto rotation : AnimatedRotations) {
+        RotationsQueue.Enqueue(rotation);
     }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(3);
-    // }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(5);
-    //     RotationsQueue.Enqueue(6);
-    // }
-    //     for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(3);
-    // }
-    //     for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(3);
-    // }
 
 
 
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(8);
-        
-    // }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(8);
-    //     RotationsQueue.Enqueue(8);
-     
-    // }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(6);
-    //     RotationsQueue.Enqueue(6);
-    //     RotationsQueue.Enqueue(6);
-    //     RotationsQueue.Enqueue(5);
-    //     RotationsQueue.Enqueue(5);
-    //     RotationsQueue.Enqueue(5);
-        
-    // }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    //     RotationsQueue.Enqueue(3);
-    // }
-    // for (int layer = 0; layer <= 8; layer++) {
-    //     RotationsQueue.Enqueue(2);
-    //     RotationsQueue.Enqueue(2);
-    //     RotationsQueue.Enqueue(2);
-    // }
-    
-
-
-
-    UE_LOG(LogTemp, Warning, TEXT("ROTATING!!!!..."));
+	UE_LOG(LogTemp, Warning, TEXT("ROTATING!!!!..."));
     UE_LOG(LogTemp, Warning, TEXT("MaxRotationAngle: %f\n"), MaxRotationAngle);
     PopulateCubesGrid();
+	// print();
 
 }
 
@@ -146,7 +128,7 @@ void ACubeActor::PopulateCubesGrid() {
     for (AStaticMeshActor* Cube : CubesVector) {
         FVector gridPosition = (Cube->GetActorLocation() - StartLocation) / CubeEdgeLength;
         int x = dtoi(gridPosition.X), y = dtoi(gridPosition.Y), z = dtoi(gridPosition.Z);
-        UE_LOG(LogTemp, Warning, TEXT("%s -> %s -> [%d][%d][%d] %s"), *Cube->GetActorLocation().ToString(), *gridPosition.ToString(), x, y, z, *Cube->GetActorForwardVector().ToString());
+        // UE_LOG(LogTemp, Warning, TEXT("%s -> %s -> [%d][%d][%d] %s"), *Cube->GetActorLocation().ToString(), *gridPosition.ToString(), x, y, z, *Cube->GetActorForwardVector().ToString());
         Cubes[x][y][z] = Cube;
     }   
 }
@@ -191,6 +173,7 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
     }
 
     if (!bIsRotating && !RotationsQueue.IsEmpty()) {
+        UE_LOG(LogTemp, Error, TEXT("Rotating..."));
         int dequeuedLayer = 0;
         if (!RotationsQueue.Dequeue(dequeuedLayer)) {
             UE_LOG(LogTemp, Error, TEXT("RotationsQueue.Dequeue failed!"));
@@ -217,7 +200,7 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
         FVector RotationCenter = CentersAtLayer[LayerToRotate];
 
         FVector EndPoint;
-        UE_LOG(LogTemp, Warning, TEXT("Rotation Center: %s"), *RotationCenter.ToString());
+        // UE_LOG(LogTemp, Warning, TEXT("Rotation Center: %s"), *RotationCenter.ToString());
 
         // UE_LOG(LogTemp, Warning, TEXT("Rotating cubes: %d"),  GetCubesInLayer(LayerToRotate)->size());
         int i = 0;
@@ -261,6 +244,7 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
 
         if (!bIsRotating) {
             PopulateCubesGrid();
+			// print();
             // RecalculateRotationCenters();
         }
     }
@@ -275,7 +259,8 @@ void ACubeActor::StartRotation(int LayerIndex)
     {
         bIsRotating = true;
         LayerToRotate = LayerIndex;
-        RotationAxis = NormalsAtLayer[LayerIndex];
+        RotationAxis = LayerIndex < 0 ? -NormalsAtLayer[-LayerIndex] : NormalsAtLayer[
+            LayerIndex];
         UE_LOG(LogTemp, Warning, TEXT("RotationAxis: %s"), *RotationAxis.ToString());
         float Duration = 0.25f;
         RotationSpeed = 90.0f / Duration; // Calculate speed based on duration

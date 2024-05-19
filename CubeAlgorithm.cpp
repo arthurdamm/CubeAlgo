@@ -12,15 +12,17 @@ int dtoi(double n) {
 CubeAlgorithm::CubeAlgorithm()
 {
     UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm()"));
-    UE_LOG(LogTemp, Warning, TEXT("sizes: %d %d %d"), sizeof(float), sizeof(double), sizeof(long double));
+    // UE_LOG(LogTemp, Warning, TEXT("sizes: %d %d %d"), sizeof(float), sizeof(double), sizeof(long double));
     populateRotators();
     FVector test = FVector(0, 1, 1);
     test = layerToRotator[0].TransformVector(test);
-    UE_LOG(LogTemp, Error, TEXT("TEST: %s"), *test.ToString());
+    // UE_LOG(LogTemp, Error, TEXT("TEST: %s"), *test.ToString());
     init();
-    print();
-    rotateLayer(0, 1);
-    print();
+    // print();
+    // rotateLayer(3, 1);
+    // rotateLayer(2, 1);
+    // rotateLayer(8, 1);
+    // print();
 }
 
 CubeAlgorithm::~CubeAlgorithm()
@@ -77,6 +79,7 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
         // UE_LOG(LogTemp, Warning, TEXT("indices before: %s"), *indices.ToString());
         cube.facing = layerToRotator[layer].TransformVector(cube.facing);
         indices = layerToRotator[layer].TransformVector(indices);
+        cube.rotation += layerToRotator[layer].Rotator();
         // UE_LOG(LogTemp, Warning, TEXT("%s"), *cube.ToString());
         // UE_LOG(LogTemp, Error, TEXT("indices after: %s"), *indices.ToString());
         cube.indices[0] = dtoi(indices.X + 1);

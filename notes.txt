@@ -43,3 +43,68 @@ void CubeAlgorithm::test() {
     }
     // PerformRotations();
 }
+
+
+
+
+  for (int layer = 0; layer <= 0; layer++) {
+        // RotationsQueue.Enqueue(3);
+        // RotationsQueue.Enqueue(2);
+		// RotationsQueue.Enqueue(8);
+    }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(3);
+    // }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(5);
+    //     RotationsQueue.Enqueue(6);
+    // }
+    //     for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(3);
+    // }
+    //     for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(3);
+    // }
+
+
+
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(8);
+        
+    // }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(8);
+    //     RotationsQueue.Enqueue(8);
+     
+    // }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(6);
+    //     RotationsQueue.Enqueue(6);
+    //     RotationsQueue.Enqueue(6);
+    //     RotationsQueue.Enqueue(5);
+    //     RotationsQueue.Enqueue(5);
+    //     RotationsQueue.Enqueue(5);
+        
+    // }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    //     RotationsQueue.Enqueue(3);
+    // }
+    // for (int layer = 0; layer <= 8; layer++) {
+    //     RotationsQueue.Enqueue(2);
+    //     RotationsQueue.Enqueue(2);
+    //     RotationsQueue.Enqueue(2);
+    // }
+    

@@ -47,6 +47,12 @@ public:
     UPROPERTY(EditAnywhere, Category = "Rubik's Cube")
     float rotationDelay = 0.25f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rubik's Cube")
+    TArray<int> InstantRotations;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rubik's Cube")
+    TArray<int> AnimatedRotations;
+
 	AStaticMeshActor* Cubes[3][3][3];
 
     std::vector<AStaticMeshActor*> CubesVector;
@@ -75,4 +81,5 @@ public:
     std::vector<AStaticMeshActor *> GetCubesInLayer(int layerIndex);
     int dtoi(double n);
     void RecalculateRotationCenters();
+	void print();
 };
