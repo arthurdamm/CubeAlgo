@@ -53,6 +53,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rubik's Cube")
     TArray<int> AnimatedRotations;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rubik's Cube")
+    bool loopAnimation = true;
+
 	AStaticMeshActor* Cubes[3][3][3];
 
     std::vector<AStaticMeshActor*> CubesVector;
@@ -76,7 +79,9 @@ private:
 
 public:
     void StartRotation(int LayerIndex);
-	void MaybeRotate(float DeltaTime);
+    void MaybeRotate(float DeltaTime);
+    void DrawCubeFacingLine(FVector &EndPoint, AStaticMeshActor *CubeToRotate);
+    void DrawNormalLine(FVector &EndPoint, FVector &RotationCenter);
     void PopulateCubesGrid();
     std::vector<AStaticMeshActor *> GetCubesInLayer(int layerIndex);
     int dtoi(double n);

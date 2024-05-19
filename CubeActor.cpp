@@ -87,7 +87,8 @@ void ACubeActor::BeginPlay()
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
-					// NewCube->SetActorForwardVector(algo.cubes[i][j][k].facing);
+
+					NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 
                     CubesVector.push_back(NewCube);
                     
@@ -114,8 +115,11 @@ void ACubeActor::BeginPlay()
     for (auto rotation : AnimatedRotations) {
         RotationsQueue.Enqueue(rotation);
     }
-
-
+    if (loopAnimation) {
+        for (int i = AnimatedRotations.Num() - 1; i >= 0; i--) {
+            RotationsQueue.Enqueue(-AnimatedRotations[i]);
+        }
+    }
 
 	UE_LOG(LogTemp, Warning, TEXT("ROTATING!!!!..."));
     UE_LOG(LogTemp, Warning, TEXT("MaxRotationAngle: %f\n"), MaxRotationAngle);
@@ -172,13 +176,22 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
         return;
     }
 
-    if (!bIsRotating && !RotationsQueue.IsEmpty()) {
-        UE_LOG(LogTemp, Error, TEXT("Rotating..."));
-        int dequeuedLayer = 0;
-        if (!RotationsQueue.Dequeue(dequeuedLayer)) {
-            UE_LOG(LogTemp, Error, TEXT("RotationsQueue.Dequeue failed!"));
+    if (!bIsRotating) {
+        if (!RotationsQueue.IsEmpty()) {
+            UE_LOG(LogTemp, Error, TEXT("Rotating..."));
+            int dequeuedLayer = 0;
+            if (!RotationsQueue.Dequeue(dequeuedLayer)) {
+                UE_LOG(LogTemp, Error, TEXT("RotationsQueue.Dequeue failed!"));
+            }
+            StartRotation(dequeuedLayer);
+        } else {
+            if (loopAnimation) {
+                for (auto rotation : AnimatedRotations) {
+                    RotationsQueue.Enqueue(rotation);
+                    RotationsQueue.Enqueue(-rotation);
+                }
+            }
         }
-        StartRotation(dequeuedLayer);
     }
     if (bIsRotating)
     {
@@ -198,11 +211,10 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
 
         FQuat QuatRotation = FQuat(RotationAxis, FMath::DegreesToRadians(DeltaRotation));
         FVector RotationCenter = CentersAtLayer[LayerToRotate];
-
         FVector EndPoint;
         // UE_LOG(LogTemp, Warning, TEXT("Rotation Center: %s"), *RotationCenter.ToString());
-
         // UE_LOG(LogTemp, Warning, TEXT("Rotating cubes: %d"),  GetCubesInLayer(LayerToRotate)->size());
+
         int i = 0;
         for (AStaticMeshActor* CubeToRotate : GetCubesInLayer(LayerToRotate)) {
             if (CubeToRotate)
@@ -213,34 +225,14 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
                 CubeToRotate->SetActorLocation(RotationCenter + RotatedPosition);
                 CubeToRotate->AddActorWorldRotation(QuatRotation);
 
-                EndPoint = CubeToRotate->GetActorLocation() + CubeToRotate->GetActorForwardVector() * 1000.0f; // Extend the line along the rotation axis
-                // DrawDebugLine(
-                //     GetWorld(),
-                //     CubeToRotate->GetActorLocation(),
-                //     EndPoint,
-                //     FColor::Red,
-                //     false, // Persistent lines
-                //     0.1,   // Lifetime
-                //     0,     // Depth priority
-                //     10.0   // Thickness
-                // );
+                // DrawCubeFacingLine(EndPoint, CubeToRotate);
             } else {
                 // UE_LOG(LogTemp, Error, TEXT("NULL PTR!"));
             }
         }
         // UE_LOG(LogTemp, Warning, TEXT("Rotated this many: %d"), i);
 
-        EndPoint = RotationCenter + RotationAxis * 1000.0f; // Extend the line along the rotation axis
-        // DrawDebugLine(
-        //     GetWorld(),
-        //     RotationCenter,
-        //     EndPoint,
-        //     FColor::Red,
-        //     false, // Persistent lines
-        //     0.1,   // Lifetime
-        //     0,     // Depth priority
-        //     10.0   // Thickness
-        // );
+        // DrawNormalLine(EndPoint, RotationCenter);
 
         if (!bIsRotating) {
             PopulateCubesGrid();
@@ -248,6 +240,36 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
             // RecalculateRotationCenters();
         }
     }
+}
+
+void ACubeActor::DrawCubeFacingLine(FVector &EndPoint, AStaticMeshActor *CubeToRotate)
+{
+    EndPoint = CubeToRotate->GetActorLocation() + CubeToRotate->GetActorForwardVector() * 1000.0f; // Extend the line along the rotation axis
+    DrawDebugLine(
+        GetWorld(),
+        CubeToRotate->GetActorLocation(),
+        EndPoint,
+        FColor::Red,
+        false, // Persistent lines
+        0.1,   // Lifetime
+        0,     // Depth priority
+        10.0   // Thickness
+    );
+}
+
+void ACubeActor::DrawNormalLine(FVector &EndPoint, FVector &RotationCenter)
+{
+    EndPoint = RotationCenter + RotationAxis * 1000.0f; // Extend the line along the rotation axis
+    DrawDebugLine(
+        GetWorld(),
+        RotationCenter,
+        EndPoint,
+        FColor::Red,
+        false, // Persistent lines
+        0.1,   // Lifetime
+        0,     // Depth priority
+        10.0   // Thickness
+    );
 }
 
 // In CubeActor.cpp
@@ -258,9 +280,9 @@ void ACubeActor::StartRotation(int LayerIndex)
     if (!bIsRotating)
     {
         bIsRotating = true;
-        LayerToRotate = LayerIndex;
-        RotationAxis = LayerIndex < 0 ? -NormalsAtLayer[-LayerIndex] : NormalsAtLayer[
-            LayerIndex];
+        LayerToRotate = abs(LayerIndex);
+        RotationAxis = LayerIndex < 0 ? -
+        NormalsAtLayer[-LayerIndex] : NormalsAtLayer[LayerIndex];
         UE_LOG(LogTemp, Warning, TEXT("RotationAxis: %s"), *RotationAxis.ToString());
         float Duration = 0.25f;
         RotationSpeed = 90.0f / Duration; // Calculate speed based on duration
