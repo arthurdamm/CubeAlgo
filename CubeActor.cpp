@@ -32,7 +32,7 @@ ACubeActor::ACubeActor()
 }
 
 void ACubeActor::print() {
-	UE_LOG(LogTemp, Warning, TEXT("ACubeActor::print()"));
+	UE_LOG(LogTemp, Warning, TEXT("%s::print()"), *GetActorLabel());
 	for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -41,10 +41,11 @@ void ACubeActor::print() {
             for (int k = 0; k < 3; k++)
 			{
 				row += "<(L: " + Cubes[i][j][k]->GetActorLocation().ToString() + ") (F: " + Cubes[i][j][k]->GetActorForwardVector().ToString()
-					+ ") (R: " + Cubes[i][j][k]->GetActorRotation().ToString() + ")>";
+					+ ") (R: " + Cubes[i][j][k]->GetActorRotation().ToString() + ") [" + FString::FromInt(i)
+                    + "][" + FString::FromInt(j) + "][" + FString::FromInt(k) + "]>";
 				FVector forwardVector = Cubes[i][j][k]->GetActorForwardVector();
 				if (dtoi(forwardVector.X) != 1 || dtoi(forwardVector.X) != 0 || dtoi(forwardVector.X) != 0) {
-					UE_LOG(LogTemp, Error, TEXT("Foward Vector Changed!"));
+					// UE_LOG(LogTemp, Error, TEXT("Foward Vector Changed!"));
 				}
 
 			}
@@ -59,12 +60,16 @@ void ACubeActor::BeginPlay()
 	Super::BeginPlay();
 
     StartTime = FPlatformTime::Seconds();
-	SetActorLocation(StartLocation);
+	// SetActorLocation(StartLocation);
+    StartLocation = GetActorLocation();
 	FVector BasePosition = StartLocation;
 	UE_LOG(LogTemp, Warning, TEXT("---Starting CubeActor location: %s"), *BasePosition.ToString());
 
+    algo = CubeAlgorithm(this);
+    algo.print();
     for (auto rotation : InstantRotations) {
         algo.rotateLayer(rotation, 1);
+        algo.print();
     }
 
     for (int i = 0; i < 3; i++)
@@ -88,7 +93,7 @@ void ACubeActor::BeginPlay()
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
-					NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
+					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 
                     CubesVector.push_back(NewCube);
                     
@@ -121,11 +126,10 @@ void ACubeActor::BeginPlay()
         }
     }
 
+    PopulateCubesGrid();
+	print();
 	UE_LOG(LogTemp, Warning, TEXT("ROTATING!!!!..."));
     UE_LOG(LogTemp, Warning, TEXT("MaxRotationAngle: %f\n"), MaxRotationAngle);
-    PopulateCubesGrid();
-	// print();
-
 }
 
 void ACubeActor::PopulateCubesGrid() {
@@ -188,7 +192,9 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
             if (loopAnimation) {
                 for (auto rotation : AnimatedRotations) {
                     RotationsQueue.Enqueue(rotation);
-                    RotationsQueue.Enqueue(-rotation);
+                }
+                for (int i = AnimatedRotations.Num() - 1; i >= 0; i--) {
+                    RotationsQueue.Enqueue(-AnimatedRotations[i]);
                 }
             }
         }
@@ -235,8 +241,9 @@ void ACubeActor::MaybeRotate(float DeltaTime) {
         // DrawNormalLine(EndPoint, RotationCenter);
 
         if (!bIsRotating) {
+            UE_LOG(LogTemp, Warning, TEXT("Rotation Stopped..."));
             PopulateCubesGrid();
-			// print();
+			print();
             // RecalculateRotationCenters();
         }
     }

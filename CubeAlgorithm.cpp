@@ -9,20 +9,20 @@ int dtoi(double n) {
     return result;
 }
 
-CubeAlgorithm::CubeAlgorithm()
+CubeAlgorithm::CubeAlgorithm(AActor* actor)
 {
-    UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm()"));
+    if (actor == nullptr) {
+        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() nullptr"));
+    } else {
+        this->actor = actor;
+        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() %p %s %s"), actor, *actor->GetName(), *actor->GetActorLabel());
+    }
     // UE_LOG(LogTemp, Warning, TEXT("sizes: %d %d %d"), sizeof(float), sizeof(double), sizeof(long double));
     populateRotators();
     FVector test = FVector(0, 1, 1);
     test = layerToRotator[0].TransformVector(test);
     // UE_LOG(LogTemp, Error, TEXT("TEST: %s"), *test.ToString());
     init();
-    // print();
-    // rotateLayer(3, 1);
-    // rotateLayer(2, 1);
-    // rotateLayer(8, 1);
-    // print();
 }
 
 CubeAlgorithm::~CubeAlgorithm()
@@ -30,7 +30,11 @@ CubeAlgorithm::~CubeAlgorithm()
 }
 
 void CubeAlgorithm::print() {
-    UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::print()!"));
+    if (actor == nullptr) {
+        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() nullptr print()"));
+    } else {
+        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::%s::print()"), *actor->GetActorLabel());
+    }
     FString row;
     for (size_t z = 0; z < N; z++) {
         for (size_t y = 0; y < N; y++) {

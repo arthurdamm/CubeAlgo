@@ -74,7 +74,7 @@ private:
     FQuat TargetRotation;
     double StartTime = 0;
 
-	CubeAlgorithm algo;
+	CubeAlgorithm algo = nullptr;
 
 
 public:

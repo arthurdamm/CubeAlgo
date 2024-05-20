@@ -12,9 +12,9 @@ struct Cube {
 	FVector facing;
 	FRotator rotation;
 	int64 indices[3];
-	Cube(): location(0, 0, 0), facing(1, 0, 0), indices{0} {}
+	Cube(): location(0, 0, 0), facing(1, 0, 0), rotation(0, 0, 0), indices{0} {}
 	FString ToString() {
-		return "<L:(" + location.ToString() + ") R:(" + rotation.ToString()
+		return "<L:(" + location.ToString() + ") F:(" + facing.ToString() + " R:(" + rotation.ToString()
 			+ ") [" + FString::FromInt(indices[0]) + "][" + FString::FromInt(indices[1])
 			+ "][" + FString::FromInt(indices[2]) + "]>, ";
 	}
@@ -29,6 +29,7 @@ private:
 	
 
 	FMatrix layerToRotator[MAX_LAYERS];
+	AActor* actor;
 
 	void adjustCoordinatesToLayer(size_t layer, size_t a, size_t b, size_t &x, size_t &y, size_t &z);
 	void populateRotators();
@@ -36,7 +37,7 @@ private:
 
 	
 public:
-	CubeAlgorithm();
+	CubeAlgorithm(AActor* actor);
 	~CubeAlgorithm();
 	void print();
 	void init();
