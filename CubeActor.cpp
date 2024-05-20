@@ -5,6 +5,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/TextRenderComponent.h"
 
 #include "HAL/PlatformTime.h"
 
@@ -94,6 +95,17 @@ void ACubeActor::BeginPlay()
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
 					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
+                    UTextRenderComponent* TextRender = NewObject<UTextRenderComponent>(NewCube);
+                    if (TextRender)
+                    {
+                        TextRender->SetText(FText::FromString("Front Face"));
+                        TextRender->SetupAttachment(NewCube->GetStaticMeshComponent());
+                        TextRender->SetRelativeLocation(FVector(110, 0, 0));  // Adjust position as needed
+                        TextRender->SetRelativeRotation(FRotator(0, 0, 0));  // Adjust rotation as needed
+                        TextRender->SetHorizontalAlignment(EHTA_Center);
+                        TextRender->SetWorldSize(50.0f);
+                        TextRender->RegisterComponent();
+                    }
 
                     CubesVector.push_back(NewCube);
                     
