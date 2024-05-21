@@ -9,6 +9,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "GameFramework/Actor.h"
 #include "Containers/Queue.h"
+#include "CubeActor.h"
 #include "RubiksCubeActor.generated.h"
 
 #define CUBE_MESH TEXT("StaticMesh'/Game/SM_RubiksCube.SM_RubiksCube'")

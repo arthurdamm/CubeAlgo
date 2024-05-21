@@ -2,6 +2,7 @@
 
 
 #include "RubiksCubeActor.h"
+#include "CubeActor.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
@@ -85,7 +86,7 @@ void ARubiksCubeActor::BeginPlay()
                 SpawnParams.Owner = this;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
                 
-                AStaticMeshActor* NewCube = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Position, FRotator::ZeroRotator, SpawnParams);
+                ACubeActor* NewCube = GetWorld()->SpawnActor<ACubeActor>(ACubeActor::StaticClass(), Position, FRotator::ZeroRotator, SpawnParams);
                 
                 if (NewCube && NewCube->GetStaticMeshComponent())
                 {
