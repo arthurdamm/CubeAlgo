@@ -95,6 +95,8 @@ void ARubiksCubeActor::BeginPlay()
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
+                    NewCube->SetIndices(i, j, k);
+
 					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 					UTextRenderComponent* TextRender = NewObject<UTextRenderComponent>(NewCube);
                     if (TextRender)
@@ -107,7 +109,6 @@ void ARubiksCubeActor::BeginPlay()
                         TextRender->SetWorldSize(50.0f);
                         TextRender->RegisterComponent();
                     }
-
                     CubesVector.push_back(NewCube);
                     
                     if (j == 1 && k == 1) {
@@ -146,11 +147,12 @@ void ARubiksCubeActor::BeginPlay()
 }
 
 void ARubiksCubeActor::PopulateCubesGrid() {
-    for (AStaticMeshActor* Cube : CubesVector) {
+    for (ACubeActor* Cube : CubesVector) {
         FVector gridPosition = (Cube->GetActorLocation() - StartLocation) / CubeEdgeLength;
         int x = dtoi(gridPosition.X), y = dtoi(gridPosition.Y), z = dtoi(gridPosition.Z);
         // UE_LOG(LogTemp, Warning, TEXT("%s -> %s -> [%d][%d][%d] %s"), *Cube->GetActorLocation().ToString(), *gridPosition.ToString(), x, y, z, *Cube->GetActorForwardVector().ToString());
         Cubes[x][y][z] = Cube;
+        Cube->UpdateIndices(x, y, z);
     }   
 }
 

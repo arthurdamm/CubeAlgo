@@ -57,9 +57,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rubik's Cube")
     bool loopAnimation = true;
 
-	AStaticMeshActor* Cubes[3][3][3];
+	ACubeActor* Cubes[3][3][3];
 
-    std::vector<AStaticMeshActor*> CubesVector;
+    std::vector<ACubeActor*> CubesVector;
     FVector NormalsAtLayer[9];
     FVector CentersAtLayer[9];
     TQueue<int> RotationsQueue;
