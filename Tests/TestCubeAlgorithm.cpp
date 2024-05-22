@@ -1,15 +1,43 @@
-// CubeAlgorithmTests.cpp
+#pragma once
+
+#include "CoreMinimal.h"
 #include "Misc/AutomationTest.h"
-#include "../CubeAlgorithm.h"  // Include the header of the actual class you're testing
+#include "../CubeAlgorithm.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCubeRotationTest, "Test.CubeAlgorithm.Rotation", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCubeAlgorithmTest, "CubeAlgorithm.Tests.RotationTests", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool FCubeRotationTest::RunTest(const FString& Parameters)
+FString ExpectedStr = R"(
+<L:(0.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][0][0](0][2][0])>, <L:(1.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][0](1][0][0])>, <L:(2.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][0](2][0][0])>, 
+<L:(0.00, 2.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][1][0](0][2][1])>, <L:(1.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][0](1][1][0])>, <L:(2.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][0](2][1][0])>, 
+<L:(0.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][2][0](0][2][2])>, <L:(1.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][0](1][2][0])>, <L:(2.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][0](2][2][0])>, 
+<L:(0.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][0][1](0][1][0])>, <L:(1.00, 0.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][1](1][0][1])>, <L:(2.00, 0.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][1](2][0][1])>, 
+<L:(0.00, 1.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][1][1](0][1][1])>, <L:(1.00, 1.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][1](1][1][1])>, <L:(2.00, 1.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][1](2][1][1])>, 
+<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][2][1](0][1][2])>, <L:(1.00, 2.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][1](1][2][1])>, <L:(2.00, 2.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][1](2][2][1])>, 
+<L:(0.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][0][2](0][0][0])>, <L:(1.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][2](1][0][2])>, <L:(2.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][2](2][0][2])>, 
+<L:(0.00, 0.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][1][2](0][0][1])>, <L:(1.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][2](1][1][2])>, <L:(2.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][2](2][1][2])>, 
+<L:(0.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][2][2](0][0][2])>, <L:(1.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][2](1][2][2])>, <L:(2.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][2](2][2][2])>, 
+)";
+
+bool FCubeAlgorithmTest::RunTest(const FString& Parameters)
 {
-    // CubeAlgorithm cubeAlg(this);
-    // cubeAlg.init();
-    // cubeAlg.init();
-    TestTrue(TEXT("Example test always passes"), true);
+    // Initialize the CubeAlgorithm
+    AActor* DummyActor = NewObject<AActor>();
+    CubeAlgorithm Algo(DummyActor);
+
+    // Perform a rotation
+    Algo.rotateLayer(0, 1);
+
+    // Expected result after rotating layer 0 by 90 degrees
+    FString ExpectedResult = ExpectedStr;
+    // Add more expected results for other cubes...
+
+    // Check if the actual result matches the expected result
+    FString ActualResult = Algo.ToString();
+    TestEqual(TEXT("Cube [0][0][0] Rotation"), ActualResult, ExpectedResult);
+    
+
+    // Add more checks for other cubes...
 
     return true;
 }
+

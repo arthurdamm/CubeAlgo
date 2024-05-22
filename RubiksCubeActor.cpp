@@ -96,6 +96,7 @@ void ARubiksCubeActor::BeginPlay()
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
                     NewCube->SetIndices(i, j, k);
+                    NewCube->cubealgo = algo.cubes[i][j][k].ToString();
 
 					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 					UTextRenderComponent* TextRender = NewObject<UTextRenderComponent>(NewCube);

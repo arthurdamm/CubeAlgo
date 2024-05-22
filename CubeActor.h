@@ -22,6 +22,9 @@ public:
     UPROPERTY(EditAnywhere, Category = "Rubik's Cube")
     TArray<int> indices = {0, 0, 0};
 
+	UPROPERTY(EditAnywhere, Category = "Rubik's Cube")
+	FString cubealgo = "";
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

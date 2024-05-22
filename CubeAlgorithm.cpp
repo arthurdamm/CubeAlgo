@@ -35,16 +35,21 @@ void CubeAlgorithm::print() {
     } else {
         UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::%s::print()"), *actor->GetActorLabel());
     }
-    FString row;
+    UE_LOG(LogTemp, Error, TEXT("%s"), *ToString());
+}
+
+FString CubeAlgorithm::ToString() {
+    FString row, page = "\n";
     for (size_t z = 0; z < N; z++) {
         for (size_t y = 0; y < N; y++) {
             row = "";
             for (size_t x = 0; x < N; x++) {
                 row += cubes[x][y][z].ToString();
             }
-            UE_LOG(LogTemp, Error, TEXT("%s"), *row);
+            page += row + '\n';
         }
     }
+    return page;
 }
 
 void CubeAlgorithm::init() {
@@ -54,6 +59,9 @@ void CubeAlgorithm::init() {
                 cubes[x][y][z].indices[0] = x;
                 cubes[x][y][z].indices[1] = y;
                 cubes[x][y][z].indices[2] = z;
+                cubes[x][y][z].originalIndices[0] = x;
+                cubes[x][y][z].originalIndices[1] = y;
+                cubes[x][y][z].originalIndices[2] = z;
                 cubes[x][y][z].location = FVector(x, y, z); 
             }
         }
@@ -73,9 +81,10 @@ void CubeAlgorithm::populateRotators() {
 }
 
 void CubeAlgorithm::rotateLayer(int layer, int direction) {
+    UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
     std::vector<Cube> layerCubes = getLayer(layer);
     FVector indices;
-    for (auto cube : layerCubes) {
+    for (auto& cube : layerCubes) {
         indices.X = cube.indices[0] - 1;
         indices.Y = cube.indices[1] - 1;
         indices.Z = cube.indices[2] - 1;
@@ -83,7 +92,9 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
         // UE_LOG(LogTemp, Warning, TEXT("indices before: %s"), *indices.ToString());
         cube.facing = layerToRotator[layer].TransformVector(cube.facing);
         indices = layerToRotator[layer].TransformVector(indices);
-        cube.rotation += layerToRotator[layer].Rotator();
+        // cube.rotation += layerToRotator[layer].Rotator();
+        cube.rotation = (FQuat(cube.rotation) * FQuat(layerToRotator[layer].Rotator())).Rotator();
+
         // UE_LOG(LogTemp, Warning, TEXT("%s"), *cube.ToString());
         // UE_LOG(LogTemp, Error, TEXT("indices after: %s"), *indices.ToString());
         cube.indices[0] = dtoi(indices.X + 1);
