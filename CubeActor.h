@@ -3,6 +3,7 @@
 #pragma once
 
 #include <array>
+#include "Utilities.h"
 #include "CoreMinimal.h"
 #include "Engine/StaticMeshActor.h"
 #include "CubeActor.generated.h"
@@ -13,7 +14,6 @@ class CUBEALGO_API ACubeActor : public AStaticMeshActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ACubeActor();
 
     UPROPERTY(EditAnywhere, Category = "Rubik's Cube")
@@ -25,6 +25,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rubik's Cube")
 	FString cubealgo = "";
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rubik's Cube")
+    float CubeEdgeLength = 210.0f; // Adjust size as needed
+
+	UPROPERTY(EditAnywhere)
+	FVector StartLocation;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,5 +41,7 @@ public:
 
 	void SetIndices(int x, int y, int z);
 	void UpdateIndices(int x, int y, int z);
+	FString ToString();
+	FString ToStringNormalized();
 
 };

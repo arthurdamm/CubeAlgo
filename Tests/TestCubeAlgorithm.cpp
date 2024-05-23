@@ -1,12 +1,6 @@
-#pragma once
+#include "TestCubeAlgorithm.h"
 
-#include "CoreMinimal.h"
-#include "Misc/AutomationTest.h"
-#include "../CubeAlgorithm.h"
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCubeAlgorithmTest, "CubeAlgorithm.Tests.RotationTests", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-FString ExpectedStr = R"(
+FString RotateLayer0ExpectedStr = R"(
 <L:(0.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][0][0](0][2][0])>, <L:(1.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][0](1][0][0])>, <L:(2.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][0](2][0][0])>, 
 <L:(0.00, 2.00, 1.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][1][0](0][2][1])>, <L:(1.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][0](1][1][0])>, <L:(2.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][0](2][1][0])>, 
 <L:(0.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][2][0](0][2][2])>, <L:(1.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][0](1][2][0])>, <L:(2.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][0](2][2][0])>, 
@@ -18,26 +12,49 @@ FString ExpectedStr = R"(
 <L:(0.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 90.00) [0][2][2](0][0][2])>, <L:(1.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][2](1][2][2])>, <L:(2.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][2](2][2][2])>, 
 )";
 
+FString RotateLayer7ExpectedStr = R"(
+<L:(0.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][0][0](0][0][0])>, <L:(1.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][0](1][0][0])>, <L:(2.00, 0.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][0](2][0][0])>, 
+<L:(0.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][1][0](0][1][0])>, <L:(1.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][0](1][1][0])>, <L:(2.00, 1.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][0](2][1][0])>, 
+<L:(0.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][2][0](0][2][0])>, <L:(1.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][0](1][2][0])>, <L:(2.00, 2.00, 0.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][0](2][2][0])>, 
+<L:(0.00, 0.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [0][0][1](0][2][1])>, <L:(1.00, 0.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [1][0][1](0][1][1])>, <L:(2.00, 0.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [2][0][1](0][0][1])>, 
+<L:(0.00, 1.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [0][1][1](1][2][1])>, <L:(1.00, 1.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [1][1][1](1][1][1])>, <L:(2.00, 1.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [2][1][1](1][0][1])>, 
+<L:(0.00, 2.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [0][2][1](2][2][1])>, <L:(1.00, 2.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [1][2][1](2][1][1])>, <L:(2.00, 2.00, 1.00) F:(0.00, 1.00, 0.00) R:(0.00, 90.00, 0.00) [2][2][1](2][0][1])>, 
+<L:(0.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][0][2](0][0][2])>, <L:(1.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][0][2](1][0][2])>, <L:(2.00, 0.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][0][2](2][0][2])>, 
+<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][1][2](0][1][2])>, <L:(1.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][1][2](1][1][2])>, <L:(2.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][1][2](2][1][2])>, 
+<L:(0.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [0][2][2](0][2][2])>, <L:(1.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [1][2][2](1][2][2])>, <L:(2.00, 2.00, 2.00) F:(1.00, 0.00, 0.00) R:(0.00, 0.00, 0.00) [2][2][2](2][2][2])>, 
+)";
+
 bool FCubeAlgorithmTest::RunTest(const FString& Parameters)
+{
+    TestRotateLayer0(*this);
+    TestRotateLayer7(*this);
+    return true;
+}
+
+void TestRotateLayer0(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
     CubeAlgorithm Algo(DummyActor);
 
-    // Perform a rotation
+    // Perform a rotation on layer 1
     Algo.rotateLayer(0, 1);
-
-    // Expected result after rotating layer 0 by 90 degrees
-    FString ExpectedResult = ExpectedStr;
-    // Add more expected results for other cubes...
 
     // Check if the actual result matches the expected result
     FString ActualResult = Algo.ToString();
-    TestEqual(TEXT("Cube [0][0][0] Rotation"), ActualResult, ExpectedResult);
-    
-
-    // Add more checks for other cubes...
-
-    return true;
+    Test.TestEqual(TEXT("Cube Layer 0 Rotation"), ActualResult, RotateLayer0ExpectedStr);
 }
 
+void TestRotateLayer7(FAutomationTestBase& Test)
+{
+    // Initialize the CubeAlgorithm
+    AActor* DummyActor = NewObject<AActor>();
+    CubeAlgorithm Algo(DummyActor);
+
+    // Perform a rotation on layer 7
+    Algo.rotateLayer(7, 1);
+
+    // Check if the actual result matches the expected result
+    FString ActualResult = Algo.ToString();
+    Test.TestEqual(TEXT("Cube Layer 7 Rotation"), ActualResult, RotateLayer7ExpectedStr);
+}

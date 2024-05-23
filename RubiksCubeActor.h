@@ -85,7 +85,7 @@ public:
     void DrawNormalLine(FVector &EndPoint, FVector &RotationCenter);
     void PopulateCubesGrid();
     std::vector<AStaticMeshActor *> GetCubesInLayer(int layerIndex);
-    int dtoi(double n);
     void RecalculateRotationCenters();
 	void print();
+    FString ToString();
 };

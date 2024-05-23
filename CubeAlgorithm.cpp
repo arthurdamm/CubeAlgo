@@ -3,25 +3,19 @@
 
 #include "CubeAlgorithm.h"
 
-int dtoi(double n) {
-    int result = static_cast<int64>(fabs(round(n)));
-    // UE_LOG(LogTemp, Display, TEXT("dtoi(%f)=%d"), n, result);
-    return result;
-}
-
 CubeAlgorithm::CubeAlgorithm(AActor* actor)
 {
     if (actor == nullptr) {
-        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm() nullptr"));
     } else {
         this->actor = actor;
-        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() %p %s %s"), actor, *actor->GetName(), *actor->GetActorLabel());
+        UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm() %p %s %s"), actor, *actor->GetName(), *actor->GetActorLabel());
     }
     // UE_LOG(LogTemp, Warning, TEXT("sizes: %d %d %d"), sizeof(float), sizeof(double), sizeof(long double));
     populateRotators();
     FVector test = FVector(0, 1, 1);
     test = layerToRotator[0].TransformVector(test);
-    // UE_LOG(LogTemp, Error, TEXT("TEST: %s"), *test.ToString());
+    // UE_LOG(LogTemp, Warning, TEXT("TEST: %s"), *test.ToString());
     init();
 }
 
@@ -31,11 +25,11 @@ CubeAlgorithm::~CubeAlgorithm()
 
 void CubeAlgorithm::print() {
     if (actor == nullptr) {
-        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm() nullptr print()"));
+        UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm() nullptr print()"));
     } else {
-        UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::%s::print()"), *actor->GetActorLabel());
+        UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm::%s::print()"), *actor->GetActorLabel());
     }
-    UE_LOG(LogTemp, Error, TEXT("%s"), *ToString());
+    UE_LOG(LogTemp, Warning, TEXT("%s"), *ToString());
 }
 
 FString CubeAlgorithm::ToString() {
@@ -81,7 +75,7 @@ void CubeAlgorithm::populateRotators() {
 }
 
 void CubeAlgorithm::rotateLayer(int layer, int direction) {
-    UE_LOG(LogTemp, Error, TEXT("CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
+    UE_LOG(LogTemp, Warning, TEXT("!!CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
     std::vector<Cube> layerCubes = getLayer(layer);
     FVector indices;
     for (auto& cube : layerCubes) {
@@ -92,46 +86,85 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
         // UE_LOG(LogTemp, Warning, TEXT("indices before: %s"), *indices.ToString());
         cube.facing = layerToRotator[layer].TransformVector(cube.facing);
         indices = layerToRotator[layer].TransformVector(indices);
-        // cube.rotation += layerToRotator[layer].Rotator();
-        cube.rotation = (FQuat(cube.rotation) * FQuat(layerToRotator[layer].Rotator())).Rotator();
+        cube.rotation += layerToRotator[layer].Rotator();
+        // cube.rotation = (FQuat(cube.rotation) * FQuat(layerToRotator[layer].Rotator())).Rotator();
 
         // UE_LOG(LogTemp, Warning, TEXT("%s"), *cube.ToString());
-        // UE_LOG(LogTemp, Error, TEXT("indices after: %s"), *indices.ToString());
+        // UE_LOG(LogTemp, Warning, TEXT("indices after: %s"), *indices.ToString());
         cube.indices[0] = dtoi(indices.X + 1);
         cube.indices[1] = dtoi(indices.Y + 1);
         cube.indices[2] = dtoi(indices.Z + 1);
-        UE_LOG(LogTemp, Error, TEXT("cube after: %s"), *cube.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("cube after: %s"), *cube.ToString());
         cubes[cube.indices[0]][cube.indices[1]][cube.indices[2]] = cube;
-        UE_LOG(LogTemp, Display, TEXT("."));
     }
 }
+
+// void CubeAlgorithm::rotateLayer(int layer, int direction) {
+//     UE_LOG(LogTemp, Warning, TEXT("!!CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
+
+//     // Determine the rotation axis based on the layer
+//     FVector RotationAxis;
+//     if (layer >= 0 && layer < N) {
+//         RotationAxis = FVector(1, 0, 0); // X-axis layers
+//     } else if (layer >= N && layer < 2 * N) {
+//         RotationAxis = FVector(0, 1, 0); // Y-axis layers
+//     } else if (layer >= 2 * N && layer < 3 * N) {
+//         RotationAxis = FVector(0, 0, 1); // Z-axis layers
+//     }
+
+//     // Calculate the quaternion for the rotation
+//     FQuat QuatRotation = FQuat(RotationAxis, FMath::DegreesToRadians(90.0f * direction));
+
+//     // Get the cubes in the layer
+//     std::vector<Cube*> layerCubes = getLayer(layer);
+
+//     // Rotate each cube in the layer
+//     for (auto* cube : layerCubes) {
+//         UE_LOG(LogTemp, Warning, TEXT("cube before: %s"), *cube->ToString());
+//         FVector relativePosition = cube->location - FVector(1.0f, 1.0f, 1.0f);
+//         FVector rotatedPosition = QuatRotation.RotateVector(relativePosition);
+//         cube->location = rotatedPosition + FVector(1.0f, 1.0f, 1.0f);
+
+//         cube->facing = QuatRotation.RotateVector(cube->facing);
+
+//         // Update indices based on new position
+//         cube->indices[0] = dtoi(cube->location.X + 1);
+//         cube->indices[1] = dtoi(cube->location.Y + 1);
+//         cube->indices[2] = dtoi(cube->location.Z + 1);
+
+//         // Update the rotation (this is optional, based on your needs)
+//         cube->rotation = (FQuat(cube->rotation) * QuatRotation).Rotator();
+
+//         UE_LOG(LogTemp, Warning, TEXT("cube after: %s"), *cube->ToString());
+//     }
+//     for (auto* cube : layerCubes) {
+//     // Update the cube in the grid
+//         cubes[cube->indices[0]][cube->indices[1]][cube->indices[2]] = *cube;
+//     }
+// }
 
 std::vector<Cube> CubeAlgorithm::getLayer(int layer) {
     std::vector<Cube> layerCubes;
     for (size_t a = 0; a < N; a++) {
         for (size_t b = 0; b < N; b++) {
             size_t x = 0, y = 0, z = 0;
-            adjustCoordinatesToLayer(layer, a, b, x, y, z);
+            if (layer >= 0 && layer <= 2) {
+                x = layer - 0;
+                y = a;
+                z = b;
+            } else if (layer >= 3 && layer <= 5) {
+                x = a;
+                y = layer - 3;
+                z = b;
+            } else if (layer >= 6 && layer <= 8) {
+                x = a;
+                y = b;
+                z = layer - 6;
+            }
             layerCubes.push_back(cubes[x][y][z]);
             // UE_LOG(LogTemp, Display, TEXT("Before: layer:%d x:%d y:%d z:%d"), layer, x, y, z);
 
         }
     }
     return layerCubes;
-}
-
-void CubeAlgorithm::adjustCoordinatesToLayer(size_t layer, size_t a, size_t b, size_t &x, size_t &y, size_t &z) {
-    if (layer >= 0 && layer <= 2) {
-        x = layer - 0;
-        y = a;
-        z = b;
-    } else if (layer >= 3 && layer <= 5) {
-        x = a;
-        y = layer - 3;
-        z = b;
-    } else if (layer >= 6 && layer <= 8) {
-        x = a;
-        y = b;
-        z = layer - 6;
-    }
 }

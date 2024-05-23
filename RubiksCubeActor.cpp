@@ -35,26 +35,26 @@ ARubiksCubeActor::ARubiksCubeActor()
 
 void ARubiksCubeActor::print() {
 	UE_LOG(LogTemp, Warning, TEXT("%s::print()"), *GetActorLabel());
-	for (int i = 0; i < 3; i++)
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *ToString());
+}
+
+FString ARubiksCubeActor::ToString() {
+    FString page = "\n";
+    for (int k = 0; k < 3; k++)
     {
         for (int j = 0; j < 3; j++)
         {
-			FString row = "";
-            for (int k = 0; k < 3; k++)
-			{
-				row += "<(L: " + Cubes[i][j][k]->GetActorLocation().ToString() + ") (F: " + Cubes[i][j][k]->GetActorForwardVector().ToString()
-					+ ") (R: " + Cubes[i][j][k]->GetActorRotation().ToString() + ") [" + FString::FromInt(i)
-                    + "][" + FString::FromInt(j) + "][" + FString::FromInt(k) + "]>";
-				FVector forwardVector = Cubes[i][j][k]->GetActorForwardVector();
-				if (dtoi(forwardVector.X) != 1 || dtoi(forwardVector.X) != 0 || dtoi(forwardVector.X) != 0) {
-					// UE_LOG(LogTemp, Error, TEXT("Foward Vector Changed!"));
-				}
-
-			}
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *row);
-		}
-	}
+            FString row = "";
+            for (int i = 0; i < 3; i++)
+            {
+                row += Cubes[i][j][k]->ToStringNormalized();
+            }
+            page += row + "\n";
+        }
+    }
+    return page;
 }
+
 
 // Called when the game starts or when spawned
 void ARubiksCubeActor::BeginPlay()
@@ -91,12 +91,15 @@ void ARubiksCubeActor::BeginPlay()
                 if (NewCube && NewCube->GetStaticMeshComponent())
                 {
 					UE_LOG(LogTemp, Warning, TEXT("Spawned Cube at %s"), *Position.ToString());
+                    NewCube->StartLocation = StartLocation;
+                    NewCube->CubeEdgeLength = CubeEdgeLength;
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
                     NewCube->SetIndices(i, j, k);
                     NewCube->cubealgo = algo.cubes[i][j][k].ToString();
+                    
 
 					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 					UTextRenderComponent* TextRender = NewObject<UTextRenderComponent>(NewCube);
@@ -246,11 +249,9 @@ void ARubiksCubeActor::MaybeRotate(float DeltaTime) {
                 FVector RotatedPosition = QuatRotation.RotateVector(RelativePosition);
                 CubeToRotate->SetActorLocation(RotationCenter + RotatedPosition);
                 CubeToRotate->AddActorWorldRotation(QuatRotation);
-
                 // DrawCubeFacingLine(EndPoint, CubeToRotate);
-            } else {
-                // UE_LOG(LogTemp, Error, TEXT("NULL PTR!"));
             }
+
         }
         // UE_LOG(LogTemp, Warning, TEXT("Rotated this many: %d"), i);
 
@@ -312,10 +313,6 @@ void ARubiksCubeActor::StartRotation(int LayerIndex)
         RotationAngle = 0.0f;
         TargetRotation = FQuat(RotationAxis, FMath::DegreesToRadians(90.0f));
     }
-}
-
-int ARubiksCubeActor::dtoi(double n) {
-    return static_cast<int>(fabs(round(n)));
 }
 
 void ARubiksCubeActor::RecalculateRotationCenters() {

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Utilities.h"
 #include "CoreMinimal.h"
 
 #define N 3
@@ -44,8 +45,6 @@ private:
 
 	FMatrix layerToRotator[MAX_LAYERS];
 	AActor* actor;
-
-	void adjustCoordinatesToLayer(size_t layer, size_t a, size_t b, size_t &x, size_t &y, size_t &z);
 	void populateRotators();
 	std::vector<Cube> getLayer(int layer);
 
