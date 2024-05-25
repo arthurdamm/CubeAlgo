@@ -40,6 +40,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetIndices(int x, int y, int z);
+	void SetOriginalIndices(int x, int y, int z);
 	void UpdateIndices(int x, int y, int z);
 	FString ToString();
 	FString ToStringNormalized();

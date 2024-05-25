@@ -97,6 +97,9 @@ void ARubiksCubeActor::BeginPlay()
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
 					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
 
+                    NewCube->SetOriginalIndices(algo.cubes[i][j][k].originalIndices[0],
+                        algo.cubes[i][j][k].originalIndices[1],
+                        algo.cubes[i][j][k].originalIndices[2]);
                     NewCube->SetIndices(i, j, k);
                     NewCube->cubealgo = algo.cubes[i][j][k].ToString();
                     
@@ -305,8 +308,7 @@ void ARubiksCubeActor::StartRotation(int LayerIndex)
     {
         bIsRotating = true;
         LayerToRotate = abs(LayerIndex);
-        RotationAxis = LayerIndex < 0 ? -
-        NormalsAtLayer[-LayerIndex] : NormalsAtLayer[LayerIndex];
+        RotationAxis = LayerIndex < 0 ? -NormalsAtLayer[-LayerIndex] : NormalsAtLayer[LayerIndex];
         UE_LOG(LogTemp, Warning, TEXT("RotationAxis: %s"), *RotationAxis.ToString());
         float Duration = 0.25f;
         RotationSpeed = 90.0f / Duration; // Calculate speed based on duration

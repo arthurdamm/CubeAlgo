@@ -33,6 +33,17 @@ struct Cube {
         );
     }
 
+	FString ToStringNormalized() const {
+        return FString::Printf(
+            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d](%d][%d][%d])>, "),
+            abs(location.X), abs(location.Y), abs(location.Z),
+            abs(facing.X), abs(facing.Y), abs(facing.Z),
+            abs(rotation.Pitch), abs(rotation.Yaw), abs(rotation.Roll),
+            indices[0], indices[1], indices[2],
+            originalIndices[0], originalIndices[1], originalIndices[2]
+        );
+    }
+
 };
 
 /**
@@ -54,9 +65,11 @@ public:
 	~CubeAlgorithm();
 	void print();
 	FString ToString();
+	FString ToStringNormalized();
 	void init();
 	// rotates given layer 90 degrees in positive or negative direction
 	void rotateLayer(int layer, int direction);
+	FVector getRotationAxisForLayer(int layer);
 
 	// 3D N^3 sized grid containing forward vectors at each (x,y,z)
 	// position (small cube) in the large rubik's cube

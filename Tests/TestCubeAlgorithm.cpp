@@ -41,7 +41,7 @@ void TestRotateLayer0(FAutomationTestBase& Test)
     Algo.rotateLayer(0, 1);
 
     // Check if the actual result matches the expected result
-    FString ActualResult = Algo.ToString();
+    FString ActualResult = Algo.ToStringNormalized();
     Test.TestEqual(TEXT("Cube Layer 0 Rotation"), ActualResult, RotateLayer0ExpectedStr);
 }
 
@@ -55,6 +55,6 @@ void TestRotateLayer7(FAutomationTestBase& Test)
     Algo.rotateLayer(7, 1);
 
     // Check if the actual result matches the expected result
-    FString ActualResult = Algo.ToString();
+    FString ActualResult = Algo.ToStringNormalized();
     Test.TestEqual(TEXT("Cube Layer 7 Rotation"), ActualResult, RotateLayer7ExpectedStr);
 }

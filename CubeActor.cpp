@@ -24,10 +24,13 @@ void ACubeActor::Tick(float DeltaTime)
 
 }
 
-void ACubeActor::SetIndices(int x, int y, int z)
-{
+void ACubeActor::SetOriginalIndices(int x, int y, int z) {
 	originalIndices.Empty();
 	originalIndices.Append({x, y, z});
+}
+
+void ACubeActor::SetIndices(int x, int y, int z)
+{
 	indices.Empty();
 	indices.Append({x, y, z});
 }
