@@ -46,7 +46,7 @@ FString ACubeActor::ToString() {
 	FVector forwardVector = GetActorForwardVector();
 	FRotator rotation = GetActorRotation();
 	return FString::Printf(
-            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d](%d][%d][%d])>, "),
+            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
             location.X, location.Y, location.Z,
             forwardVector.X, forwardVector.Y, forwardVector.Z,
             rotation.Pitch, rotation.Yaw, rotation.Roll,
@@ -63,7 +63,7 @@ FString ACubeActor::ToStringNormalized() {
 	FVector forwardVector = GetActorForwardVector();
 	FRotator rotation = GetActorRotation();
 	return FString::Printf(
-            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d](%d][%d][%d])>, "),
+            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
             x, y, z,
             forwardVector.X, forwardVector.Y, forwardVector.Z,
             rotation.Pitch, rotation.Yaw, rotation.Roll,

@@ -24,7 +24,7 @@ struct Cube {
 
     FString ToString() const {
         return FString::Printf(
-            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d](%d][%d][%d])>, "),
+            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
             location.X, location.Y, location.Z,
             facing.X, facing.Y, facing.Z,
             rotation.Pitch, rotation.Yaw, rotation.Roll,
@@ -35,7 +35,7 @@ struct Cube {
 
 	FString ToStringNormalized() const {
         return FString::Printf(
-            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d](%d][%d][%d])>, "),
+            TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
             abs(location.X), abs(location.Y), abs(location.Z),
             abs(facing.X), abs(facing.Y), abs(facing.Z),
             abs(rotation.Pitch), abs(rotation.Yaw), abs(rotation.Roll),
@@ -70,6 +70,7 @@ public:
 	// rotates given layer 90 degrees in positive or negative direction
 	void rotateLayer(int layer, int direction);
 	FVector getRotationAxisForLayer(int layer);
+	FVector getCenterForLayer(int layer);
 
 	// 3D N^3 sized grid containing forward vectors at each (x,y,z)
 	// position (small cube) in the large rubik's cube
