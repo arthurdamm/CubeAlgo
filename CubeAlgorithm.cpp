@@ -169,6 +169,8 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
         // Update the rotation (this is optional, based on your needs)
         // reverse?
         cube.rotation = (FQuat(cube.rotation) * QuatRotation).Rotator();
+        cube.orientation *= QuatRotation;
+        cube.orientation.Normalize();
         // cube.location = saveLocation;
         UE_LOG(LogTemp, Error, TEXT("cube after: %s"), *cube.ToString());
     }

@@ -12,9 +12,12 @@ struct Cube {
 	FVector location;
 	FVector facing;
 	FRotator rotation;
+	FQuat orientation;
 	int indices[3];
 	int originalIndices[3];
-	Cube(): location(0, 0, 0), facing(1, 0, 0), rotation(0, 0, 0), indices{0}, originalIndices{0} {}
+	Cube(): location(0, 0, 0), facing(1, 0, 0), rotation(0, 0, 0), indices{0}, originalIndices{0} {
+		orientation = FQuat(rotation);
+	}
 	// FString ToString() {
 	// 	return "<L:(" + location.ToString() + ") F:(" + facing.ToString() + " R:(" + rotation.ToString()
 	// 		+ ") [" + FString::FromInt(indices[0]) + "][" + FString::FromInt(indices[1])

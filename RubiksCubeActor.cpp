@@ -95,7 +95,8 @@ void ARubiksCubeActor::BeginPlay()
                     NewCube->CubeEdgeLength = CubeEdgeLength;
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
-					NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
+					// NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
+                    NewCube->SetActorRotation(algo.cubes[i][j][k].orientation.Rotator());
 
                     NewCube->SetOriginalIndices(algo.cubes[i][j][k].originalIndices[0],
                         algo.cubes[i][j][k].originalIndices[1],

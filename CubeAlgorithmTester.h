@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CubeAlgorithm.h"
+#include "CubeActor.h"
+#include "RubiksCubeActor.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CubeAlgorithmTester.generated.h"
@@ -17,6 +19,9 @@ public:
 	ACubeAlgorithmTester();
 	TArray<CubeAlgorithm*> algos = {};
 
+	UPROPERTY(EditAnywhere)
+    UStaticMesh* CubeMesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,6 +31,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void addAlgo(CubeAlgorithm* algo);
 	void testRotateLayer0();
+	void testQuatRotation();
+	ACubeActor* spawnCube(FVector location=FVector(0, 0, 0), FVector facing=FVector(1, 0 , 0), FRotator rotation=FRotator(0, 0, 0));
 
 
 };
