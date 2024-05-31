@@ -14,6 +14,8 @@
 
 #define CUBE_MESH TEXT("StaticMesh'/Game/SM_RubiksCube.SM_RubiksCube'")
 
+#define CUBE_EDGE_LENGTH 210.0f
+
 UCLASS()
 class CUBEALGO_API ARubiksCubeActor : public AActor
 {
@@ -37,7 +39,7 @@ public:
 
     // Cube edge length constant
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rubik's Cube")
-    float CubeEdgeLength = 210.0f; // Adjust size as needed
+    float CubeEdgeLength = CUBE_EDGE_LENGTH; // Adjust size as needed
 
 	UPROPERTY(EditAnywhere)
 	FVector StartLocation;
