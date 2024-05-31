@@ -30,8 +30,8 @@ void ACubeAlgorithmTester::BeginPlay()
 	addAlgo(&algo1);
 	// testRotateLayer0();
 	// testQuatRotation();
-	// testQuatRotationRelative();
-	testQuatRotationEuclid();
+	testQuatRotationRelative();
+	// testQuatRotationEuclid();
 }
 
 // Called every frame
@@ -117,6 +117,8 @@ void ACubeAlgorithmTester::testQuatRotationRelative()
 	// Define the original rotations
 	FQuat QuatRotationAroundX = FQuat(FVector(1, 0, 0), PI / 2);
 	FQuat QuatRotationAroundY = FQuat(FVector(0, 1, 0), -PI / 2);
+	FQuat QuatRotationAroundZ = FQuat(FVector(0, 0, 1), -PI / 2);
+	FQuat QuatRotationAroundXY = (QuatRotationAroundX * QuatRotationAroundZ);
 
 	auto* defaultCube = spawnCube(FVector(0, 0, 500), facing, FRotator());
 	DrawActorFacingLine(defaultCube);
@@ -125,21 +127,37 @@ void ACubeAlgorithmTester::testQuatRotationRelative()
 	facing = defaultCube->GetActorForwardVector();
 
 	// First cube - rotated around X globally
-	auto* defaultCubeAroundX = spawnCube(FVector(0, 0, 1000), facing, QuatRotationAroundX.Rotator());
+	// auto* defaultCubeAroundX = spawnCube(FVector(0, 0, 1000), facing, QuatRotationAroundX.Rotator());
+	// DrawActorFacingLine(defaultCubeAroundX);
+	// UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundX: facing:%s"), *defaultCubeAroundX->GetActorForwardVector().ToString());
+
+	// auto* defaultCubeAroundXY = spawnCube(FVector(0, 0, 1500), facing, (QuatRotationAroundY * QuatRotationAroundX).Rotator());
+	// DrawActorFacingLine(defaultCubeAroundXY);
+	// UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXY->GetActorForwardVector().ToString());
+
+	// auto* defaultCubeAroundXYOther = spawnCube(FVector(0, 0, 2000), facing, (QuatRotationAroundZ * QuatRotationAroundY * QuatRotationAroundX).Rotator());
+	// DrawActorFacingLine(defaultCubeAroundXYOther);
+	// UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYOther->GetActorForwardVector().ToString());
+
+	// auto* defaultCubeAroundXYOtherWay = spawnCube(FVector(0, 0, 2500), facing, (QuatRotationAroundZ * QuatRotationAroundXY).Rotator());
+	// DrawActorFacingLine(defaultCubeAroundXYOtherWay);
+	// UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYOther->GetActorForwardVector().ToString());
+
+		auto* defaultCubeAroundX = spawnCube(FVector(0, 0, 1000), facing, QuatRotationAroundZ.Rotator());
 	DrawActorFacingLine(defaultCubeAroundX);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundX: facing:%s"), *defaultCubeAroundX->GetActorForwardVector().ToString());
 
-	// To rotate the next cube around Y globally after X rotation,
-	// we must reset to the original facing before applying Y rotation.
-	FVector newFacingAfterX = QuatRotationAroundX.RotateVector(facing);
-	FQuat QuatRotationAroundYGlobal = FQuat(FVector(0, 1, 0), -PI / 2);
-	FVector finalFacing = QuatRotationAroundYGlobal.RotateVector(newFacingAfterX);
-	FRotator finalRotator = finalFacing.Rotation();
-
-	auto* defaultCubeAroundXY = spawnCube(FVector(0, 0, 1500), facing, finalRotator);
+	auto* defaultCubeAroundXY = spawnCube(FVector(0, 0, 1500), facing, (QuatRotationAroundX * QuatRotationAroundZ).Rotator());
 	DrawActorFacingLine(defaultCubeAroundXY);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXY->GetActorForwardVector().ToString());
-	UE_LOG(LogTemp, Warning, TEXT("facing: %s newFacingAfterX: %s finalFacing: %s "), *facing.ToString(), *newFacingAfterX.ToString(), *finalFacing.ToString());
+
+	auto* defaultCubeAroundXYOther = spawnCube(FVector(0, 0, 2000), facing, (QuatRotationAroundY * QuatRotationAroundX * QuatRotationAroundZ).Rotator());
+	DrawActorFacingLine(defaultCubeAroundXYOther);
+	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYOther->GetActorForwardVector().ToString());
+
+	auto* defaultCubeAroundXYOtherWay = spawnCube(FVector(0, 0, 2500), facing, (QuatRotationAroundY * QuatRotationAroundXY).Rotator());
+	DrawActorFacingLine(defaultCubeAroundXYOtherWay);
+	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYOther->GetActorForwardVector().ToString());
 
 }
 
@@ -156,11 +174,11 @@ void ACubeAlgorithmTester::testQuatRotationEuclid()
 	DrawActorFacingLine(defaultCubeAroundX);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundX: facing:%s"), *defaultCubeAroundX->GetActorForwardVector().ToString());
 
-	auto* defaultCubeAroundXY = spawnCube(FVector(0, 0, 1500), facing, FRotator(0, 0, 90) + FRotator(90, 0, 0));
+	auto* defaultCubeAroundXY = spawnCube(FVector(0, 0, 1500), facing, FRotator(0, 0, 90) + FRotator(0, 90, 0));
 	DrawActorFacingLine(defaultCubeAroundXY);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXY->GetActorForwardVector().ToString());
 
-	auto* defaultCubeAroundXYZ = spawnCube(FVector(0, 0, 2000), facing, FRotator(0, 0, 90) + FRotator(90, 0, 0) + FRotator(0, 90, 0));
+	auto* defaultCubeAroundXYZ = spawnCube(FVector(0, 0, 2000), facing, FRotator(0, 0, 90) + FRotator(0, 90, 0) + FRotator(90, 0, 0));
 	DrawActorFacingLine(defaultCubeAroundXYZ);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYZ->GetActorForwardVector().ToString());
 

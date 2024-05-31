@@ -80,11 +80,12 @@ void CubeAlgorithm::init() {
 void CubeAlgorithm::populateRotators() {
     for (int layer = 0; layer < MAX_LAYERS; layer++) {
         if (layer >= 0 && layer < N) {
-            layerToRotator[layer] = FRotationMatrix(FRotator(0, 0, 90));
+            // layerToRotator[layer] = FRotationMatrix(FRotator(0, 0, 90));
+            layerToRotator[layer] = FRotator(0, 0, 90);
         } else if (layer >= N && layer < 2 * N) {
-            layerToRotator[layer] = FRotationMatrix(FRotator(90, 0, 0));
+            layerToRotator[layer] = FRotator(90, 0, 0);
         } else if (layer >= 2 * N && layer < 3 * N) {
-            layerToRotator[layer] = FRotationMatrix(FRotator(0, 90, 0));
+            layerToRotator[layer] = FRotator(0, 90, 0);
         }
     }
 }
@@ -103,7 +104,7 @@ FVector CubeAlgorithm::getRotationAxisForLayer(int layer) {
 }
 
 // void CubeAlgorithm::rotateLayer(int layer, int direction) {
-//     UE_LOG(LogTemp, Warning, TEXT("!!CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
+//     UE_LOG(LogTemp, Warning, TEXT("!!CubeAlgorithm::rotateLayer OLD(%d, %d)"), layer, direction);
 //     std::vector<Cube> layerCubes = getLayer(layer);
 //     FVector indices;
 //     for (auto& cube : layerCubes) {
@@ -112,9 +113,10 @@ FVector CubeAlgorithm::getRotationAxisForLayer(int layer) {
 //         indices.Z = cube.indices[2] - 1;
 //         UE_LOG(LogTemp, Warning, TEXT("cube before: %s"), *cube.ToString());
 //         // UE_LOG(LogTemp, Warning, TEXT("indices before: %s"), *indices.ToString());
-//         cube.facing = layerToRotator[layer].TransformVector(cube.facing);
-//         indices = layerToRotator[layer].TransformVector(indices);
-//         cube.rotation += layerToRotator[layer].Rotator();
+//         // cube.facing = layerToRotator[layer].TransformVector(cube.facing);
+//         FMatrix matrix = FRotationMatrix(layerToRotator[layer]);
+//         indices = matrix.TransformVector(indices);
+//         cube.rotation += layerToRotator[layer];
 //         // cube.rotation = (FQuat(cube.rotation) * FQuat(layerToRotator[layer].Rotator())).Rotator();
 
 //         // UE_LOG(LogTemp, Warning, TEXT("%s"), *cube.ToString());
@@ -169,7 +171,7 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
         // Update the rotation (this is optional, based on your needs)
         // reverse?
         cube.rotation = (FQuat(cube.rotation) * QuatRotation).Rotator();
-        cube.orientation *= QuatRotation;
+        cube.orientation = QuatRotation * cube.orientation;
         cube.orientation.Normalize();
         // cube.location = saveLocation;
         UE_LOG(LogTemp, Error, TEXT("cube after: %s"), *cube.ToString());
