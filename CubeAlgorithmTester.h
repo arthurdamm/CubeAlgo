@@ -32,7 +32,11 @@ public:
 	void addAlgo(CubeAlgorithm* algo);
 	void testRotateLayer0();
 	void testQuatRotation();
+	void testQuatRotationRelative();
+	void testQuatRotationEuclid();
+
 	ACubeActor* spawnCube(FVector location=FVector(0, 0, 0), FVector facing=FVector(1, 0 , 0), FRotator rotation=FRotator(0, 0, 0));
+	void DrawActorFacingLine(AStaticMeshActor *actor);
 
 
 };
