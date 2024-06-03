@@ -10,4 +10,5 @@ void TestToString(FAutomationTestBase& Test);
 void TestToStringNormalized(FAutomationTestBase& Test);
 void TestHandleNegativeZero(FAutomationTestBase& Test);
 void TestAreQuatsEqual(FAutomationTestBase& Test);
+void TestAreQuatsNotEqual(FAutomationTestBase& Test);
 void TestDtoi(FAutomationTestBase& Test);

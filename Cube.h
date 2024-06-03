@@ -41,9 +41,9 @@ struct Cube {
 
     bool operator==(const Cube& other) const {
     return 
-        location == other.location &&
-        facing == other.facing &&
-        rotation == other.rotation &&
+        location.Equals(other.location, 1e-6f) &&
+        facing.Equals(other.facing, 1e-6f) &&
+        rotation.Equals(other.rotation, 1e-6f) &&
         AreQuatsEqual(orientation, other.orientation) &&
         std::equal(std::begin(indices), std::end(indices), std::begin(other.indices)) &&
         std::equal(std::begin(originalIndices), std::end(originalIndices), std::begin(other.originalIndices));

@@ -2,14 +2,13 @@
 
 bool FCubeTest::RunTest(const FString& Parameters)
 {
-
-
     TestEqualLocal(*this);
     TestNotEqualLocal(*this);
     TestToString(*this);
     TestToStringNormalized(*this);
     TestHandleNegativeZero(*this);
     TestAreQuatsEqual(*this);
+    TestAreQuatsNotEqual(*this);
     TestDtoi(*this);
 
     return true;
@@ -87,6 +86,16 @@ void TestAreQuatsEqual(FAutomationTestBase& Test)
 
     FQuat quat3(2, 2, 3, 4);
     Test.TestFalse("AreQuatsEqual False", AreQuatsEqual(quat1, quat3));
+}
+
+void TestAreQuatsNotEqual(FAutomationTestBase& Test)
+{
+    FQuat quat(1, 2, 3, 4);
+    FQuat shouldBeEqualQuat(1, 2, 3, 4 + 1e-7);
+    FQuat shouldBeNotEqualQuat(1, 2, 3, 4 + 1e-6);
+
+    Test.TestTrue("AreQuatsNotEqual Should be equal", AreQuatsEqual(quat, shouldBeEqualQuat));
+    Test.TestFalse("AreQuatsNotEqual Should not be equal", AreQuatsEqual(quat, shouldBeNotEqualQuat));
 }
 
 void TestDtoi(FAutomationTestBase& Test)
