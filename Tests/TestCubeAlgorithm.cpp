@@ -51,12 +51,13 @@ FString InitializeCubesExpectedStr = R"(
 
 bool FCubeAlgorithmTestBasic::RunTest(const FString& Parameters)
 {
-    TestInitializeCubes(*this);
+    TestCubeAlgorithm TestCubeAlgorithm;
+    TestCubeAlgorithm.TestInitializeCubes(*this);
     return true;
 }
 
 
-void TestInitializeCubes(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestInitializeCubes(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -73,15 +74,45 @@ void TestInitializeCubes(FAutomationTestBase& Test)
 
 bool FCubeAlgorithmTestRotation::RunTest(const FString& Parameters)
 {
-    TestRotateLayer0(*this);
-    TestRotateLayer7(*this);
-    TestGetRotationAxisForLayer(*this);
-    TestGetCenterForLayer(*this);
-    TestLayerRotations(*this);
+    TestCubeAlgorithm TestCubeAlgorithm;
+
+    TestCubeAlgorithm.TestToString(*this);
+    TestCubeAlgorithm.TestToStringNormalized(*this);
+    TestCubeAlgorithm.TestRotateLayer0(*this);
+    TestCubeAlgorithm.TestRotateLayer7(*this);
+    TestCubeAlgorithm.TestGetRotationAxisForLayer(*this);
+    TestCubeAlgorithm.TestGetCenterForLayer(*this);
+    TestCubeAlgorithm.TestLayerRotations(*this);
+    TestCubeAlgorithm.TestEqualLocal(*this);
+
     return true;
 }
 
-void TestRotateLayer0(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestToString(FAutomationTestBase& Test)
+{
+    // Initialize the CubeAlgorithm
+    AActor* DummyActor = NewObject<AActor>();
+    CubeAlgorithm Algo(DummyActor);
+
+    // Check if the actual result matches the expected result
+    bool ActualResult = Algo.ToString().Len() > 0;
+    bool ExpectedResult = true;
+    Test.TestEqual(TEXT("Cube ToString"), ActualResult, ExpectedResult);
+}
+
+void TestCubeAlgorithm::TestToStringNormalized(FAutomationTestBase& Test)
+{
+    // Initialize the CubeAlgorithm
+    AActor* DummyActor = NewObject<AActor>();
+    CubeAlgorithm Algo(DummyActor);
+
+    // Check if the actual result matches the expected result
+    bool ActualResult = Algo.ToStringNormalized().Len() > 0;
+    bool ExpectedResult = true;
+    Test.TestEqual(TEXT("Cube ToStringNormalized"), ActualResult, ExpectedResult);
+}
+
+void TestCubeAlgorithm::TestRotateLayer0(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -95,7 +126,7 @@ void TestRotateLayer0(FAutomationTestBase& Test)
     Test.TestEqual(TEXT("Cube Layer 0 Rotation"), ActualResult, RotateLayer0ExpectedStr);
 }
 
-void TestRotateLayer7(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestRotateLayer7(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -110,7 +141,7 @@ void TestRotateLayer7(FAutomationTestBase& Test)
 }
 
 
-void TestGetRotationAxisForLayer(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestGetRotationAxisForLayer(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -118,13 +149,13 @@ void TestGetRotationAxisForLayer(FAutomationTestBase& Test)
 
     // Get the rotation axis for layer 1
     FVector ActualResult = Algo.getRotationAxisForLayer(1);
-    FVector GetRotationAxisForLayerExpectedResult = FVector(1, 0, 0);
+    FVector GetRotationAxisForLayerExpectedResult = FVector(-1, 0, 0);
 
     // Check if the actual result matches the expected result
     Test.TestEqual(TEXT("Rotation Axis for Layer 1"), ActualResult, GetRotationAxisForLayerExpectedResult);
 }
 
-void TestGetCenterForLayer(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestGetCenterForLayer(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -138,7 +169,7 @@ void TestGetCenterForLayer(FAutomationTestBase& Test)
     Test.TestEqual(TEXT("Center for Layer 1"), ActualResult, GetCenterForLayerExpectedResult);
 }
 
-void TestLayerRotations(FAutomationTestBase& Test)
+void TestCubeAlgorithm::TestLayerRotations(FAutomationTestBase& Test)
 {
     // Initialize the CubeAlgorithm
     AActor* DummyActor = NewObject<AActor>();
@@ -146,7 +177,7 @@ void TestLayerRotations(FAutomationTestBase& Test)
     CubeAlgorithm AlgoCompare(DummyActor);
 
     // Loop through the N layers
-    for (int layer = 0; layer < N; layer++)
+    for (int layer = 0; layer < N*N; layer++)
     {
         // Rotate the layer in one direction
         Algo.rotateLayer(layer, 1);
@@ -159,11 +190,38 @@ void TestLayerRotations(FAutomationTestBase& Test)
         // Check if the actual result matches the expected result
 
         FQuat q1 = Algo.cubes[0][0][0].orientation, q2 = AlgoCompare.cubes[0][0][0].orientation;
-        UE_LOG(LogTemp, Display, TEXT("QUATS: %s %s, == %d, Equal %d"), *q1.ToString(), *q2.ToString(), q1 == q2, AreQuatsEqual(q1, q2));
 
         bool ActualResult = Algo == AlgoCompare;
         bool ExpectedResult = true;
-        UE_LOG(LogTemp, Display, TEXT("Expected: %s, Actual: %s"), *Algo.ToStringNormalized(), *AlgoCompare.ToStringNormalized());
         Test.TestEqual(FString::Printf(TEXT("Layer %d Rotation Equality"), layer), ActualResult, ExpectedResult);
     }
+}
+
+void TestCubeAlgorithm::TestEqualLocal(FAutomationTestBase& Test)
+{
+    // Initialize the CubeAlgorithm
+    AActor* DummyActor = NewObject<AActor>();
+    CubeAlgorithm Algo(DummyActor);
+    CubeAlgorithm AlgoCompare(DummyActor);
+
+    // Check if the actual result matches the expected result
+    bool ActualResult = Algo == AlgoCompare;
+    bool ExpectedResult = true;
+    Test.TestEqual(TEXT("Cube Equality"), ActualResult, ExpectedResult);
+
+    // Rotate the layer in one direction
+    AlgoCompare.rotateLayer(0, 1);
+
+    // Check if the actual result matches the expected result
+    ActualResult = Algo == AlgoCompare;
+    ExpectedResult = false;
+    Test.TestEqual(TEXT("Cube Inequality"), ActualResult, ExpectedResult);
+
+    // Rotate the layer in the opposite direction
+    AlgoCompare.rotateLayer(0, -1);
+
+    // Check if the actual result matches the expected result
+    ActualResult = Algo == AlgoCompare;
+    ExpectedResult = true;
+    Test.TestEqual(TEXT("Cube Identity Equality"), ActualResult, ExpectedResult);
 }

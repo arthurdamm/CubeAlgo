@@ -7,7 +7,7 @@
 #include "Cube.h"
 
 #define N 3
-#define MAX_LAYERS N*N
+#define LAYERS N*N
 
 /**
  * Abstractly manages a grid of cubes and the rotation of their layers
@@ -16,8 +16,13 @@ class CUBEALGO_API CubeAlgorithm
 {
 private:
     // The actor associated with this CubeAlgorithm
-    AActor* actor;  
+    AActor* actor;
 
+    // The centers of each layer used for rotation
+    FVector centersByLayer[LAYERS];
+
+    void populateCenterForLayer();
+    
     // Returns a vector of Cubes in the specified layer
     std::vector<Cube> getLayer(int layer);  
 
@@ -47,7 +52,7 @@ public:
     void rotateLayer(int layer, int direction);  
 
     // Returns the rotation axis for a specified layer
-    FVector getRotationAxisForLayer(int layer);  
+    FVector getRotationAxisForLayer(int layer);
 
     // Returns the center of a specified layer
     FVector getCenterForLayer(int layer);

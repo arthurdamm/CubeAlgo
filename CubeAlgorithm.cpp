@@ -6,12 +6,13 @@
 CubeAlgorithm::CubeAlgorithm(AActor* actor)
 {
     if (actor == nullptr) {
-        UE_LOG(LogTemp, Display, TEXT("CubeAlgorithm() nullptr"));
+        // UE_LOG(LogTemp, Display, TEXT("CubeAlgorithm() nullptr"));
     } else {
         this->actor = actor;
-        UE_LOG(LogTemp, Display, TEXT("CubeAlgorithm() %p %s %s"), actor, *actor->GetName(), *actor->GetActorLabel());
+        // UE_LOG(LogTemp, Display, TEXT("CubeAlgorithm() %p %s %s"), actor, *actor->GetName(), *actor->GetActorLabel());
     }
 
+    populateCenterForLayer();
     initializeCubes();
 }
 
@@ -96,8 +97,7 @@ FVector CubeAlgorithm::getRotationAxisForLayer(int layer) {
     return RotationAxis;
 }
 
-FVector CubeAlgorithm::getCenterForLayer(int layer) {
-    FVector centersByLayer[N];
+void CubeAlgorithm::populateCenterForLayer() {
     centersByLayer[0] = FVector(0, 1, 1);
     centersByLayer[1] = FVector(1, 1, 1);
     centersByLayer[2] = FVector(2, 1, 1);
@@ -107,11 +107,15 @@ FVector CubeAlgorithm::getCenterForLayer(int layer) {
     centersByLayer[6] = FVector(1, 1, 0);
     centersByLayer[7] = FVector(1, 1, 1);
     centersByLayer[8] = FVector(1, 1, 2);
+}
+
+
+FVector CubeAlgorithm::getCenterForLayer(int layer) {
     return centersByLayer[layer];
 }
 
 void CubeAlgorithm::rotateLayer(int layer, int direction) {
-    UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
+    // UE_LOG(LogTemp, Warning, TEXT("CubeAlgorithm::rotateLayer(%d, %d)"), layer, direction);
 
     FVector RotationAxis = getRotationAxisForLayer(layer);
     FQuat QuatRotation = FQuat(RotationAxis, FMath::DegreesToRadians(90.0f * direction));
@@ -157,8 +161,6 @@ std::vector<Cube> CubeAlgorithm::getLayer(int layer) {
                 z = layer - 6;
             }
             layerCubes.push_back(cubes[x][y][z]);
-            // UE_LOG(LogTemp, Display, TEXT("Before: layer:%d x:%d y:%d z:%d"), layer, x, y, z);
-
         }
     }
     return layerCubes;

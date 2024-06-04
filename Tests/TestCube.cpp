@@ -2,19 +2,22 @@
 
 bool FCubeTest::RunTest(const FString& Parameters)
 {
-    TestEqualLocal(*this);
-    TestNotEqualLocal(*this);
-    TestToString(*this);
-    TestToStringNormalized(*this);
-    TestHandleNegativeZero(*this);
-    TestAreQuatsEqual(*this);
-    TestAreQuatsNotEqual(*this);
-    TestDtoi(*this);
+    TestCube TestCube;
+
+    TestCube.TestToString(*this);
+    TestCube.TestToStringNormalized(*this);
+    TestCube.TestEqualLocal(*this);
+    TestCube.TestNotEqualLocal(*this);
+
+    TestCube.TestDtoi(*this);
+    TestCube.TestHandleNegativeZero(*this);
+    TestCube.TestAreQuatsEqual(*this);
+    TestCube.TestAreQuatsNotEqual(*this);
 
     return true;
 }
 
-void InitializeCube(Cube& cube)
+void TestCube::InitializeCube(Cube& cube)
 {
     cube.location = FVector(0.0f, 1.0f, 2.0f);
     cube.facing = FVector(1.0f, 0.0f, 0.0f);
@@ -29,7 +32,26 @@ void InitializeCube(Cube& cube)
     cube.originalIndices[2] = 2;
 }
 
-void TestEqualLocal(FAutomationTestBase& Test)
+
+void TestCube::TestToString(FAutomationTestBase& Test)
+{
+    Cube cube;
+    InitializeCube(cube);
+
+    FString expected = "<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) O:(1.00, 2.00, 3.00, 4.00) R:(-90.00, 131.76, -159.83) [0][1][2] ([0][1][2])>, ";
+    Test.TestEqual("ToString", cube.ToString(), expected);
+}
+
+void TestCube::TestToStringNormalized(FAutomationTestBase& Test)
+{
+    Cube cube;
+    InitializeCube(cube);
+
+    FString expected = "<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) O:(1.00, 2.00, 3.00, 4.00) R:(90.00, 131.76, 159.83) [0][1][2] ([0][1][2])>, ";
+    Test.TestEqual("ToStringNormalized", cube.ToStringNormalized(), expected);
+}
+
+void TestCube::TestEqualLocal(FAutomationTestBase& Test)
 {
     Cube cube1;
     Cube cube2;
@@ -40,7 +62,7 @@ void TestEqualLocal(FAutomationTestBase& Test)
 
 }
 
-void TestNotEqualLocal(FAutomationTestBase& Test)
+void TestCube::TestNotEqualLocal(FAutomationTestBase& Test)
 {
     Cube cube1;
     Cube cube2;
@@ -51,30 +73,20 @@ void TestNotEqualLocal(FAutomationTestBase& Test)
     Test.TestFalse("Cubes are not equal", cube1 == cube2);
 }
 
-void TestToString(FAutomationTestBase& Test)
+void TestCube::TestDtoi(FAutomationTestBase& Test)
 {
-    Cube cube;
-    InitializeCube(cube);
-
-    FString expected = "<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) O:(1.00, 2.00, 3.00, 4.00) R:(-90.00, 131.76, -159.83) [0][1][2] ([0][1][2])>, ";
-    Test.TestEqual("ToString", cube.ToString(), expected);
+    Test.TestEqual("Dtoi", dtoi(1.5), 2);
+    Test.TestEqual("Dtoi", dtoi(1.4), 1);
+    Test.TestEqual("Dtoi", dtoi(-1.5), 2);
+    Test.TestEqual("Dtoi", dtoi(-1.4), 1);
 }
 
-void TestToStringNormalized(FAutomationTestBase& Test)
-{
-    Cube cube;
-    InitializeCube(cube);
-
-    FString expected = "<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) O:(1.00, 2.00, 3.00, 4.00) R:(90.00, 131.76, 159.83) [0][1][2] ([0][1][2])>, ";
-    Test.TestEqual("ToStringNormalized", cube.ToStringNormalized(), expected);
-}
-
-void TestHandleNegativeZero(FAutomationTestBase& Test)
+void TestCube::TestHandleNegativeZero(FAutomationTestBase& Test)
 {
     Test.TestEqual("HandleNegativeZero", HandleNegativeZero(-0.0), 0.0);
 }
 
-void TestAreQuatsEqual(FAutomationTestBase& Test)
+void TestCube::TestAreQuatsEqual(FAutomationTestBase& Test)
 {
     FQuat quat1(1, 2, 3, 4);
     FQuat quat2(1, 2, 3, 4);
@@ -88,7 +100,7 @@ void TestAreQuatsEqual(FAutomationTestBase& Test)
     Test.TestFalse("AreQuatsEqual False", AreQuatsEqual(quat1, quat3));
 }
 
-void TestAreQuatsNotEqual(FAutomationTestBase& Test)
+void TestCube::TestAreQuatsNotEqual(FAutomationTestBase& Test)
 {
     FQuat quat(1, 2, 3, 4);
     FQuat shouldBeEqualQuat(1, 2, 3, 4 + 1e-7);
@@ -98,10 +110,3 @@ void TestAreQuatsNotEqual(FAutomationTestBase& Test)
     Test.TestFalse("AreQuatsNotEqual Should not be equal", AreQuatsEqual(quat, shouldBeNotEqualQuat));
 }
 
-void TestDtoi(FAutomationTestBase& Test)
-{
-    Test.TestEqual("Dtoi", dtoi(1.5), 2);
-    Test.TestEqual("Dtoi", dtoi(1.4), 1);
-    Test.TestEqual("Dtoi", dtoi(-1.5), 2);
-    Test.TestEqual("Dtoi", dtoi(-1.4), 1);
-}
