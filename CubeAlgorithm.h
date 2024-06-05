@@ -7,37 +7,55 @@
 #include "Cube.h"
 
 #define N 3
-#define MAX_LAYERS N*N
-
-
+#define LAYERS N*N
 
 /**
- * 
+ * Abstractly manages a grid of cubes and the rotation of their layers
  */
 class CUBEALGO_API CubeAlgorithm
 {
 private:
-	
+    // The actor associated with this CubeAlgorithm
+    AActor* actor;
 
-	FRotator layerToRotator[MAX_LAYERS];
-	AActor* actor;
-	void populateRotators();
-	std::vector<Cube> getLayer(int layer);
+    // The centers of each layer used for rotation
+    FVector centersByLayer[LAYERS];
 
-	
+    void populateCenterForLayer();
+    
+    // Returns a vector of Cubes in the specified layer
+    std::vector<Cube> getLayer(int layer);  
+
 public:
-	CubeAlgorithm(AActor* actor);
-	~CubeAlgorithm();
-	void print();
-	FString ToString();
-	FString ToStringNormalized();
-	void init();
-	// rotates given layer 90 degrees in positive or negative direction
-	void rotateLayer(int layer, int direction);
-	FVector getRotationAxisForLayer(int layer);
-	FVector getCenterForLayer(int layer);
+    // A 3D array of Cubes
+    Cube cubes[N][N][N];  
 
-	// 3D N^3 sized grid containing forward vectors at each (x,y,z)
-	// position (small cube) in the large rubik's cube
-	Cube cubes[N][N][N];
+    // Constructor that takes an actor as an argument
+    CubeAlgorithm(AActor* actor);  
+
+    // Destructor
+    ~CubeAlgorithm();  
+
+    // Prints the state of the CubeAlgorithm
+    void print();  
+
+    // Returns a string representation of the CubeAlgorithm
+    FString ToString();
+
+    // Returns a normalized string representation of the CubeAlgorithm
+    FString ToStringNormalized();  
+
+    // Initializes the cubes in the CubeAlgorithm
+    void initializeCubes();  
+
+    // Rotates a layer of cubes in the specified direction
+    void rotateLayer(int layer, int direction);  
+
+    // Returns the rotation axis for a specified layer
+    FVector getRotationAxisForLayer(int layer);
+
+    // Returns the center of a specified layer
+    FVector getCenterForLayer(int layer);
+
+    bool operator==(const CubeAlgorithm& other) const;
 };

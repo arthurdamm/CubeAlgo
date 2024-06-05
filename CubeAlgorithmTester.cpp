@@ -26,11 +26,13 @@ void ACubeAlgorithmTester::BeginPlay()
 
 	AActor* DummyActor = NewObject<AActor>();
 	CubeAlgorithm algo1(DummyActor);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *algo1.ToStringNormalized());
+	
 	
 	addAlgo(&algo1);
-	// testRotateLayer0();
+	testRotateLayer0();
 	// testQuatRotation();
-	testQuatRotationRelative();
+	// testQuatRotationRelative();
 	// testQuatRotationEuclid();
 }
 
@@ -50,8 +52,8 @@ void ACubeAlgorithmTester::testRotateLayer0()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ACubeAlgorithmTester::testRotateLayer0 start"));	
 	for (auto* algo : algos) {
-		algo->rotateLayer(0, 1);
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *algo->ToString());
+		algo->rotateLayer(7, 1);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *algo->ToStringNormalized());
 	}
 	UE_LOG(LogTemp, Warning, TEXT("ACubeAlgorithmTester::testRotateLayer0 stop"));	
 }
@@ -187,11 +189,12 @@ void ACubeAlgorithmTester::testQuatRotationEuclid()
 void ACubeAlgorithmTester::DrawActorFacingLine(AStaticMeshActor *actor)
 {
     FVector EndPoint = actor->GetActorLocation() + actor->GetActorForwardVector() * 200.0f; // Extend the line along the rotation axis
-    DrawDebugLine(
+    DrawDebugDirectionalArrow(
         GetWorld(),
-        actor->GetActorLocation(),
+        actor->GetActorLocation() + 0.0f,
         EndPoint,
-        FColor::Red,
+		1000.0f,
+        FColor::Blue,
         false, // Persistent lines
         100,   // Lifetime
         0,     // Depth priority
