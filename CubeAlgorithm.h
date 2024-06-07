@@ -28,7 +28,7 @@ private:
 
 public:
     // A 3D array of Cubes
-    Cube cubes[N][N][N];  
+    Cube cubes[N][N][N];
 
     // Constructor that takes an actor as an argument
     CubeAlgorithm(AActor* actor);  
@@ -58,4 +58,5 @@ public:
     FVector getCenterForLayer(int layer);
 
     bool operator==(const CubeAlgorithm& other) const;
+
 };

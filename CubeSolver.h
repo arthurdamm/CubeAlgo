@@ -1,15 +1,21 @@
 #pragma once
 
+#include "CubeAlgorithm.h"
 #include "CoreMinimal.h"
+
 
 /**
  * CubeSolver class declaration
  */
 class CubeSolver
 {
+private:
+    CubeAlgorithm* cubeAlgo = nullptr;
+
 public:
     // Constructor
     CubeSolver();
+    CubeSolver(CubeAlgorithm* cubeAlgo);
 
     // Destructor
     ~CubeSolver();

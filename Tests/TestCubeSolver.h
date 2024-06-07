@@ -5,3 +5,9 @@
 #include "../CubeSolver.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCubeSolverTestBasic, "CubeSolver.Tests.Basic", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+class TestCubeSolver
+{
+public:
+    bool TestIsSolved(FAutomationTestBase& Test);
+};

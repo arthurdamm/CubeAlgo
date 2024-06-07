@@ -2,7 +2,10 @@
 
 // Implement the constructor
 CubeSolver::CubeSolver() {
-    // Add your code here
+}
+
+CubeSolver::CubeSolver(CubeAlgorithm* cubeAlgo) {
+    this->cubeAlgo = cubeAlgo;
 }
 
 // Implement the destructor
@@ -22,6 +25,16 @@ void CubeSolver::reset() {
 
 // Implement the isSolved method
 bool CubeSolver::isSolved() {
-    // Add your code here
-    return false; // Replace with your implementation
+    
+    for (size_t x = 0; x < N; x++) {
+        for (size_t y = 0; y < N; y++) {
+            for (size_t z = 0; z < N; z++) {
+                if (!AreQuatsEqual(cubeAlgo->cubes[x][y][z].orientation, cubeAlgo->cubes[0][0][0].orientation)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
 }
