@@ -3,6 +3,9 @@
 #include "Utilities.h"
 #include "CoreMinimal.h"
 
+#define N 3
+#define LAYERS N*N
+
 struct Cube {
 	FVector location;
 	FVector facing;
@@ -53,4 +56,38 @@ struct Cube {
         return !(*this == other);
     }
 
+};
+
+struct CubeGrid {
+    Cube cubes[N][N][N];
+    CubeGrid() {
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                for (int k = 0; k < N; ++k)
+                    cubes[i][j][k] = Cube();
+    }
+    CubeGrid(const CubeGrid& other) {
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                for (int k = 0; k < N; ++k)
+                    cubes[i][j][k] = other.cubes[i][j][k];
+    }
+    CubeGrid& operator=(const CubeGrid& other) {
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                for (int k = 0; k < N; ++k)
+                    cubes[i][j][k] = other.cubes[i][j][k];
+        return *this;
+    }
+    bool operator==(const CubeGrid& other) const {
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                for (int k = 0; k < N; ++k)
+                    if (cubes[i][j][k] != other.cubes[i][j][k])
+                        return false;
+        return true;
+    }
+    bool operator!=(const CubeGrid& other) const {
+        return !(*this == other);
+    }
 };

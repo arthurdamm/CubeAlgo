@@ -6,8 +6,6 @@
 #include "CoreMinimal.h"
 #include "Cube.h"
 
-#define N 3
-#define LAYERS N*N
 
 /**
  * Abstractly manages a grid of cubes and the rotation of their layers
@@ -28,7 +26,7 @@ private:
 
 public:
     // A 3D array of Cubes
-    Cube cubes[N][N][N];
+    CubeGrid grid;
 
     // Constructor that takes an actor as an argument
     CubeAlgorithm(AActor* actor);  

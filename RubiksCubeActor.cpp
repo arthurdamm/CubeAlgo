@@ -81,7 +81,7 @@ void ARubiksCubeActor::BeginPlay()
             for (int k = 0; k < 3; k++)
             {
                 FVector Position = BasePosition + FVector(i * CubeEdgeLength, j * CubeEdgeLength, k * CubeEdgeLength);
-				FRotator Rotation = algo.cubes[i][j][k].facing.Rotation();
+				FRotator Rotation = algo.grid.cubes[i][j][k].facing.Rotation();
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.Owner = this;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -95,17 +95,17 @@ void ARubiksCubeActor::BeginPlay()
                     NewCube->CubeEdgeLength = CubeEdgeLength;
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here
                     NewCube->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);  // Set mobility to Movable
-					// NewCube->SetActorRotation(algo.cubes[i][j][k].rotation);
-                    NewCube->SetActorRotation(algo.cubes[i][j][k].orientation.Rotator());
+					// NewCube->SetActorRotation(algo.grid.cubes[i][j][k].rotation);
+                    NewCube->SetActorRotation(algo.grid.cubes[i][j][k].orientation.Rotator());
 
-                    NewCube->SetOriginalIndices(algo.cubes[i][j][k].originalIndices[0],
-                        algo.cubes[i][j][k].originalIndices[1],
-                        algo.cubes[i][j][k].originalIndices[2]);
+                    NewCube->SetOriginalIndices(algo.grid.cubes[i][j][k].originalIndices[0],
+                        algo.grid.cubes[i][j][k].originalIndices[1],
+                        algo.grid.cubes[i][j][k].originalIndices[2]);
                     NewCube->SetIndices(i, j, k);
-                    NewCube->cubealgo = algo.cubes[i][j][k].ToString();
+                    NewCube->cubealgo = algo.grid.cubes[i][j][k].ToString();
                     
 
-					// NewCube->SetActorRotation(algo.cubes[i][j][k].facing.Rotation()); // hopefully correct?
+					// NewCube->SetActorRotation(algo.grid.cubes[i][j][k].facing.Rotation()); // hopefully correct?
 					UTextRenderComponent* TextRender = NewObject<UTextRenderComponent>(NewCube);
                     if (TextRender)
                     {

@@ -189,7 +189,7 @@ void TestCubeAlgorithm::TestLayerRotations(FAutomationTestBase& Test)
 
         // Check if the actual result matches the expected result
 
-        FQuat q1 = Algo.cubes[0][0][0].orientation, q2 = AlgoCompare.cubes[0][0][0].orientation;
+        FQuat q1 = Algo.grid.cubes[0][0][0].orientation, q2 = AlgoCompare.grid.cubes[0][0][0].orientation;
 
         bool ActualResult = Algo == AlgoCompare;
         bool ExpectedResult = true;

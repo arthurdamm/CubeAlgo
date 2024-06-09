@@ -36,7 +36,7 @@ FString CubeAlgorithm::ToString() {
         for (size_t y = 0; y < N; y++) {
             row = "";
             for (size_t x = 0; x < N; x++) {
-                row += cubes[x][y][z].ToString();
+                row += grid.cubes[x][y][z].ToString();
                 if (parity % 2 == 1) {
                     row += "\n";
                 }
@@ -56,7 +56,7 @@ FString CubeAlgorithm::ToStringNormalized() {
         for (size_t y = 0; y < N; y++) {
             row = "";
             for (size_t x = 0; x < N; x++) {
-                row += cubes[x][y][z].ToStringNormalized();
+                row += grid.cubes[x][y][z].ToStringNormalized();
                 if (parity % 2 == 1) {
                     row += "\n";
                 }
@@ -73,13 +73,13 @@ void CubeAlgorithm::initializeCubes() {
     for (size_t z = 0; z < N; z++) {
         for (size_t y = 0; y < N; y++) {
             for (size_t x = 0; x < N; x++) {
-                cubes[x][y][z].indices[0] = x;
-                cubes[x][y][z].indices[1] = y;
-                cubes[x][y][z].indices[2] = z;
-                cubes[x][y][z].originalIndices[0] = x;
-                cubes[x][y][z].originalIndices[1] = y;
-                cubes[x][y][z].originalIndices[2] = z;
-                cubes[x][y][z].location = FVector(x, y, z); 
+                grid.cubes[x][y][z].indices[0] = x;
+                grid.cubes[x][y][z].indices[1] = y;
+                grid.cubes[x][y][z].indices[2] = z;
+                grid.cubes[x][y][z].originalIndices[0] = x;
+                grid.cubes[x][y][z].originalIndices[1] = y;
+                grid.cubes[x][y][z].originalIndices[2] = z;
+                grid.cubes[x][y][z].location = FVector(x, y, z); 
             }
         }
     }
@@ -138,7 +138,7 @@ void CubeAlgorithm::rotateLayer(int layer, int direction) {
     }
     for (auto& cube : layerCubes) {
         // Update the cube in the grid
-        cubes[cube.indices[0]][cube.indices[1]][cube.indices[2]] = cube;
+        grid.cubes[cube.indices[0]][cube.indices[1]][cube.indices[2]] = cube;
     }
 }
 
@@ -160,7 +160,7 @@ std::vector<Cube> CubeAlgorithm::getLayer(int layer) {
                 y = b;
                 z = layer - 6;
             }
-            layerCubes.push_back(cubes[x][y][z]);
+            layerCubes.push_back(grid.cubes[x][y][z]);
         }
     }
     return layerCubes;
@@ -170,7 +170,7 @@ bool CubeAlgorithm::operator==(const CubeAlgorithm& other) const {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
-                if (!(cubes[i][j][k] == other.cubes[i][j][k])) {
+                if (!(grid.cubes[i][j][k] == other.grid.cubes[i][j][k])) {
                     return false;
                 }
             }
