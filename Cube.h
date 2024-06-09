@@ -49,4 +49,8 @@ struct Cube {
         std::equal(std::begin(originalIndices), std::end(originalIndices), std::begin(other.originalIndices));
     }
 
+    bool operator!=(const Cube& other) const {
+        return !(*this == other);
+    }
+
 };
