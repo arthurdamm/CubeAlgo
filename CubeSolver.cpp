@@ -65,7 +65,8 @@ bool CubeSolver::isSolved(const CubeGrid &cubeGrid) {
 }
 
 bool CubeSolver::isSolved() {
-    return isSolved(this->cubeAlgo->cubes);
+    // return isSolved(this->cubeAlgo->cubes);
+    return false;
 }
 
 /*
