@@ -70,7 +70,7 @@ void TestCube::TestNotEqualLocal(FAutomationTestBase& Test)
     InitializeCube(cube2);
     cube2.location = FVector(0.0f, 1.0f, 3.0f);
 
-    Test.TestFalse("Cubes are not equal", cube1 == cube2);
+    Test.TestTrue("Cubes are not equal", cube1 != cube2);
 }
 
 void TestCube::TestDtoi(FAutomationTestBase& Test)
