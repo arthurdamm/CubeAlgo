@@ -1,7 +1,9 @@
 #pragma once
 
 #include "CubeAlgorithm.h"
+#include "CubeHash.h"
 #include "CoreMinimal.h"
+#include <queue>
 
 
 /**
@@ -27,5 +29,8 @@ public:
     void reset();
 
     // Checks if the cube is solved
+    bool isSolved(const CubeGrid &cubeGrid);
     bool isSolved();
+
+    std::vector<CubeGrid> generateNextStates(const CubeGrid &cubeGrid);
 };
