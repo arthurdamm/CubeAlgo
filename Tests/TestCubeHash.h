@@ -12,4 +12,6 @@ public:
     bool TestCubeHasher(FAutomationTestBase& Test);
     bool TestGridHasher(FAutomationTestBase& Test);
     bool TestGridEqual(FAutomationTestBase& Test);
+    bool TestUnorderedSetCubeHash(FAutomationTestBase& Test);
+    bool TestUnorderedSetGridHash(FAutomationTestBase& Test);
 };
