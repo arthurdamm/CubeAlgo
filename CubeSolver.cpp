@@ -14,32 +14,32 @@ CubeSolver::~CubeSolver() {
 }
 
 void CubeSolver::solve() {
-    std::queue<CubeGrid> cubeGrids;
+    std::queue<SolutionState> cubeGrids;
 
-    CubeGrid startState;
+    SolutionState startState;
     cubeGrids.push(startState);
 
     while (!cubeGrids.empty()) {
-        CubeGrid currentGrid = cubeGrids.front();
+        SolutionState currentGrid = cubeGrids.front();
         cubeGrids.pop();
 
-        if (isSolved(currentGrid)) {
+        if (isSolved(currentGrid.cubeGrid)) {
             // If it is, we've found a solution
             break;
         }
 
         // Generate all possible next states from the current grid
-        std::vector<CubeGrid> nextStates = generateNextStates(currentGrid);
+        std::vector<SolutionState> nextStates = generateNextStates(currentGrid.cubeGrid);
 
         // Add the next states to the queue
-        for (CubeGrid& nextState : nextStates) {
+        for (SolutionState& nextState : nextStates) {
             cubeGrids.push(nextState);
         }
     }
 }
 
-std::vector<CubeGrid> CubeSolver::generateNextStates(const CubeGrid &cubeGrid) {
-    std::vector<CubeGrid> nextStates;
+std::vector<SolutionState> CubeSolver::generateNextStates(const CubeGrid &cubeGrid) {
+    std::vector<SolutionState> nextStates;
     return nextStates;
 }
 
@@ -65,7 +65,7 @@ bool CubeSolver::isSolved(const CubeGrid &cubeGrid) {
 }
 
 bool CubeSolver::isSolved() {
-    // return isSolved(this->cubeAlgo->cubes);
+    return isSolved(this->cubeAlgo->grid);
     return false;
 }
 

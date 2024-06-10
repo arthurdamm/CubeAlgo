@@ -6,9 +6,24 @@
 #include <queue>
 
 
-/**
- * CubeSolver class declaration
- */
+enum Direction {
+    CLOCKWISE,
+    COUNTERCLOCKWISE
+};
+
+struct CubeMove {
+    int layer;
+    Direction direction;
+
+    CubeMove(int l, Direction d) : layer(l), direction(d) {}
+};
+
+struct SolutionState
+{
+    CubeGrid cubeGrid;
+    std::vector<CubeMove> moves;
+};
+
 class CubeSolver
 {
 private:
@@ -32,5 +47,5 @@ public:
     bool isSolved(const CubeGrid &cubeGrid);
     bool isSolved();
 
-    std::vector<CubeGrid> generateNextStates(const CubeGrid &cubeGrid);
+    std::vector<SolutionState> generateNextStates(const CubeGrid &cubeGrid);
 };

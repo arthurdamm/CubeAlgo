@@ -5,6 +5,7 @@ bool FCubeSolverTestBasic::RunTest(const FString& Parameters)
     TestCubeSolver TestCubeSolver;
 
     TestCubeSolver.TestIsSolved(*this);
+    TestCubeSolver.TestGenerateNextStates(*this);
 
     return true;
 }
@@ -27,6 +28,22 @@ bool TestCubeSolver::TestIsSolved(FAutomationTestBase& Test)
     cubeAlgo.rotateLayer(3, 1);
     cubeAlgo.rotateLayer(3, 1);
     Test.TestEqual("IsSolved True Again", cubeSolverDefault.isSolved(), true);
+
+    return true;
+}
+
+bool TestCubeSolver::TestGenerateNextStates(FAutomationTestBase& Test)
+{
+    AActor* dummyActor = NewObject<AActor>();
+    CubeAlgorithm cubeAlgo(dummyActor);
+    CubeSolver cubeSolverDefault(&cubeAlgo);
+
+    SolutionState startState;
+    std::vector<SolutionState> nextStates = cubeSolverDefault.generateNextStates(startState.cubeGrid);
+
+    Test.TestEqual("GenerateNextStates Default", nextStates.size(), 18);
+
+
 
     return true;
 }

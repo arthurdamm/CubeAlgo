@@ -10,4 +10,5 @@ class TestCubeSolver
 {
 public:
     bool TestIsSolved(FAutomationTestBase& Test);
+    bool TestGenerateNextStates(FAutomationTestBase& Test);
 };
