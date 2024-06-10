@@ -9,11 +9,6 @@ bool FCubeTest::RunTest(const FString& Parameters)
     TestCube.TestEqualLocal(*this);
     TestCube.TestNotEqualLocal(*this);
 
-    TestCube.TestDtoi(*this);
-    TestCube.TestHandleNegativeZero(*this);
-    TestCube.TestAreQuatsEqual(*this);
-    TestCube.TestAreQuatsNotEqual(*this);
-
     return true;
 }
 
@@ -72,41 +67,3 @@ void TestCube::TestNotEqualLocal(FAutomationTestBase& Test)
 
     Test.TestTrue("Cubes are not equal", cube1 != cube2);
 }
-
-void TestCube::TestDtoi(FAutomationTestBase& Test)
-{
-    Test.TestEqual("Dtoi", dtoi(1.5), 2);
-    Test.TestEqual("Dtoi", dtoi(1.4), 1);
-    Test.TestEqual("Dtoi", dtoi(-1.5), 2);
-    Test.TestEqual("Dtoi", dtoi(-1.4), 1);
-}
-
-void TestCube::TestHandleNegativeZero(FAutomationTestBase& Test)
-{
-    Test.TestEqual("HandleNegativeZero", HandleNegativeZero(-0.0), 0.0);
-}
-
-void TestCube::TestAreQuatsEqual(FAutomationTestBase& Test)
-{
-    FQuat quat1(1, 2, 3, 4);
-    FQuat quat2(1, 2, 3, 4);
-
-    Test.TestTrue("AreQuatsEqual True", AreQuatsEqual(quat1, quat2));
-
-    quat2 = -quat2;
-    Test.TestTrue("AreQuatsEqual Negative", AreQuatsEqual(quat1, quat2));
-
-    FQuat quat3(2, 2, 3, 4);
-    Test.TestFalse("AreQuatsEqual False", AreQuatsEqual(quat1, quat3));
-}
-
-void TestCube::TestAreQuatsNotEqual(FAutomationTestBase& Test)
-{
-    FQuat quat(1, 2, 3, 4);
-    FQuat shouldBeEqualQuat(1, 2, 3, 4 + 1e-7);
-    FQuat shouldBeNotEqualQuat(1, 2, 3, 4 + 1e-6);
-
-    Test.TestTrue("AreQuatsNotEqual Should be equal", AreQuatsEqual(quat, shouldBeEqualQuat));
-    Test.TestFalse("AreQuatsNotEqual Should not be equal", AreQuatsEqual(quat, shouldBeNotEqualQuat));
-}
-

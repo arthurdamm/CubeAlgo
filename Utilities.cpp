@@ -13,3 +13,4 @@ bool AreQuatsEqual(const FQuat& A, const FQuat& B)
 {
     return (A.Equals(B, 1e-6f) || A.Equals(-B, 1e-6f));
 }
+
