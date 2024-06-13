@@ -31,6 +31,8 @@ public:
     // Constructor that takes an actor as an argument
     CubeAlgorithm(AActor* actor);  
 
+    CubeAlgorithm(CubeGrid& grid);  
+
     // Destructor
     ~CubeAlgorithm();  
 

@@ -47,5 +47,5 @@ public:
     bool isSolved(const CubeGrid &cubeGrid);
     bool isSolved();
 
-    std::vector<SolutionState> generateNextStates(const CubeGrid &cubeGrid);
+    std::vector<SolutionState> generateNextStates(SolutionState& solutionState);
 };

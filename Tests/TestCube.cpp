@@ -42,7 +42,7 @@ void TestCube::TestToStringNormalized(FAutomationTestBase& Test)
     Cube cube;
     InitializeCube(cube);
 
-    FString expected = "<L:(0.00, 1.00, 2.00) F:(1.00, 0.00, 0.00) O:(1.00, 2.00, 3.00, 4.00) R:(90.00, 131.76, 159.83) [0][1][2] ([0][1][2])>, ";
+    FString expected = "<L:(0.00, 1.00, 2.00) O:(1.00, 2.00, 3.00, 4.00) [0][1][2] ([0][1][2])>, ";
     Test.TestEqual("ToStringNormalized", cube.ToStringNormalized(), expected);
 }
 

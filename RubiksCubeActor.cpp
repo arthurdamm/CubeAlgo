@@ -81,7 +81,7 @@ void ARubiksCubeActor::BeginPlay()
             for (int k = 0; k < 3; k++)
             {
                 FVector Position = BasePosition + FVector(i * CubeEdgeLength, j * CubeEdgeLength, k * CubeEdgeLength);
-				FRotator Rotation = algo.grid.cubes[i][j][k].facing.Rotation();
+				// FRotator Rotation = algo.grid.cubes[i][j][k].facing.Rotation();
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.Owner = this;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

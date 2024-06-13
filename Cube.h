@@ -30,13 +30,23 @@ struct Cube {
         );
     }
 
-	FString ToStringNormalized() const {
+	FString ToStringNormalizedOld() const {
         return FString::Printf(
             TEXT("<L:(%.2f, %.2f, %.2f) F:(%.2f, %.2f, %.2f) O:(%.2f, %.2f, %.2f, %.2f) R:(%.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
             abs(location.X), abs(location.Y), abs(location.Z),
             abs(facing.X), abs(facing.Y), abs(facing.Z),
             HandleNegativeZero(orientation.X), HandleNegativeZero(orientation.Y), HandleNegativeZero(orientation.Z), HandleNegativeZero(orientation.W),
             abs(rotation.Pitch), abs(rotation.Yaw), abs(rotation.Roll),
+            indices[0], indices[1], indices[2],
+            originalIndices[0], originalIndices[1], originalIndices[2]
+        );
+    }
+
+    FString ToStringNormalized() const {
+        return FString::Printf(
+            TEXT("<L:(%.2f, %.2f, %.2f) O:(%.2f, %.2f, %.2f, %.2f) [%d][%d][%d] ([%d][%d][%d])>, "),
+            abs(location.X), abs(location.Y), abs(location.Z),
+            HandleNegativeZero(orientation.X), HandleNegativeZero(orientation.Y), HandleNegativeZero(orientation.Z), HandleNegativeZero(orientation.W),
             indices[0], indices[1], indices[2],
             originalIndices[0], originalIndices[1], originalIndices[2]
         );
@@ -89,5 +99,19 @@ struct CubeGrid {
     }
     bool operator!=(const CubeGrid& other) const {
         return !(*this == other);
+    }
+
+    FString ToString() const {
+        FString result = "";
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j) {
+                for (int k = 0; k < N; ++k) {
+                    result += cubes[i][j][k].ToStringNormalized();
+                }
+                result += "\n";
+            }
+            result += "\n";
+        }
+        return result;
     }
 };

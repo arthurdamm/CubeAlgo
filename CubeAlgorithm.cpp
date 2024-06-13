@@ -16,6 +16,13 @@ CubeAlgorithm::CubeAlgorithm(AActor* actor)
     initializeCubes();
 }
 
+CubeAlgorithm::CubeAlgorithm(CubeGrid& grid)
+{
+    this->grid = grid;
+    populateCenterForLayer();
+    initializeCubes();
+}
+
 CubeAlgorithm::~CubeAlgorithm()
 {
 }

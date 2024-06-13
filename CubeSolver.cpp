@@ -29,7 +29,7 @@ void CubeSolver::solve() {
         }
 
         // Generate all possible next states from the current grid
-        std::vector<SolutionState> nextStates = generateNextStates(currentGrid.cubeGrid);
+        std::vector<SolutionState> nextStates = generateNextStates(currentGrid);
 
         // Add the next states to the queue
         for (SolutionState& nextState : nextStates) {
@@ -38,8 +38,21 @@ void CubeSolver::solve() {
     }
 }
 
-std::vector<SolutionState> CubeSolver::generateNextStates(const CubeGrid &cubeGrid) {
+std::vector<SolutionState> CubeSolver::generateNextStates(SolutionState& currentState)
+{
     std::vector<SolutionState> nextStates;
+    for (size_t layer = 0; layer < LAYERS; layer++) {
+        for (int direction = 0; direction < 2; direction++) {
+            CubeAlgorithm nextCubeAlgo = CubeAlgorithm(currentState.cubeGrid);
+            nextCubeAlgo.rotateLayer(layer, direction == 0 ? 1 : -1);
+            
+            SolutionState newState;
+            newState.cubeGrid = nextCubeAlgo.grid;
+            newState.moves = currentState.moves;
+            newState.moves.push_back(CubeMove(layer, direction == 0 ? CLOCKWISE : COUNTERCLOCKWISE));
+            nextStates.push_back(newState);
+        }
+    }
     return nextStates;
 }
 

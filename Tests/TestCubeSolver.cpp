@@ -39,11 +39,22 @@ bool TestCubeSolver::TestGenerateNextStates(FAutomationTestBase& Test)
     CubeSolver cubeSolverDefault(&cubeAlgo);
 
     SolutionState startState;
-    std::vector<SolutionState> nextStates = cubeSolverDefault.generateNextStates(startState.cubeGrid);
+    std::vector<SolutionState> nextStates = cubeSolverDefault.generateNextStates(startState);
 
     Test.TestEqual("GenerateNextStates Default", nextStates.size(), 18);
 
+    // Rotate the cube
+    cubeAlgo.rotateLayer(1, 1);
 
+    // Generate next states after rotation
+    std::vector<SolutionState> nextStatesAfterRotation = cubeSolverDefault.generateNextStates(startState);
+
+    startState.cubeGrid = cubeAlgo.grid;
+    Test.TestEqual("GenerateNextStates After Rotation",
+    filter(nextStatesAfterRotation, [startState](SolutionState state) {
+        UE_LOG(LogTemp, Warning, TEXT(">> %s"), *state.cubeGrid.ToString());
+        return state.cubeGrid == startState.cubeGrid;
+    }).size(), 1);
 
     return true;
 }
