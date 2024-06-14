@@ -5,8 +5,10 @@
 #include "CubeAlgorithm.h"
 #include "CubeActor.h"
 #include "RubiksCubeActor.h"
+#include "CubeSolver.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "CubeAlgorithmTester.generated.h"
 
 UCLASS()
@@ -34,9 +36,11 @@ public:
 	void testQuatRotation();
 	void testQuatRotationRelative();
 	void testQuatRotationEuclid();
+	void testSpawnRubiksCube();
 
 	ACubeActor* spawnCube(FVector location=FVector(0, 0, 0), FVector facing=FVector(1, 0 , 0), FRotator rotation=FRotator(0, 0, 0));
 	void DrawActorFacingLine(AStaticMeshActor *actor);
+
 
 
 };

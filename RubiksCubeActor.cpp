@@ -31,6 +31,13 @@ ARubiksCubeActor::ARubiksCubeActor()
     } else {
 		UE_LOG(LogTemp, Warning, TEXT("MeshObj: FAILED"));
 	}
+
+    algo = CubeAlgorithm(this);
+}
+
+void ARubiksCubeActor::setAlgo(CubeAlgorithm newAlgo) {
+    UE_LOG(LogTemp, Warning, TEXT("%s::setAlgo()"), *GetActorLabel());
+    this->algo = newAlgo;
 }
 
 void ARubiksCubeActor::print() {
@@ -65,13 +72,13 @@ void ARubiksCubeActor::BeginPlay()
 	// SetActorLocation(StartLocation);
     StartLocation = GetActorLocation();
 	FVector BasePosition = StartLocation;
-	UE_LOG(LogTemp, Warning, TEXT("---Starting CubeActor location: %s"), *BasePosition.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("%s::BeginPlay()"), *GetActorLabel());
 
-    algo = CubeAlgorithm(this);
+
     algo.print();
     for (auto rotation : InstantRotations) {
         algo.rotateLayer(rotation, 1);
-        algo.print();
+        // algo.print();
     }
 
     for (int i = 0; i < 3; i++)
@@ -90,7 +97,7 @@ void ARubiksCubeActor::BeginPlay()
                 
                 if (NewCube && NewCube->GetStaticMeshComponent())
                 {
-					UE_LOG(LogTemp, Warning, TEXT("Spawned Cube at %s"), *Position.ToString());
+					// UE_LOG(LogTemp, Warning, TEXT("Spawned Cube at %s"), *Position.ToString());
                     NewCube->StartLocation = StartLocation;
                     NewCube->CubeEdgeLength = CubeEdgeLength;
                     NewCube->GetStaticMeshComponent()->SetStaticMesh(CubeMesh);  // Referencing CubeMesh here

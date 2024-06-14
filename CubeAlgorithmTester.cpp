@@ -30,7 +30,8 @@ void ACubeAlgorithmTester::BeginPlay()
 	
 	
 	addAlgo(&algo1);
-	testRotateLayer0();
+	testSpawnRubiksCube();
+	// testRotateLayer0();
 	// testQuatRotation();
 	// testQuatRotationRelative();
 	// testQuatRotationEuclid();
@@ -184,6 +185,43 @@ void ACubeAlgorithmTester::testQuatRotationEuclid()
 	DrawActorFacingLine(defaultCubeAroundXYZ);
 	UE_LOG(LogTemp, Warning, TEXT("defaultCubeAroundXY: facing:%s"), *defaultCubeAroundXYZ->GetActorForwardVector().ToString());
 
+}
+
+void ACubeAlgorithmTester::testSpawnRubiksCube()
+{
+	CubeAlgorithm cubeAlgo(this);
+    CubeSolver cubeSolverDefault(&cubeAlgo);
+
+    SolutionState startState;
+    std::vector<SolutionState> nextStates = cubeSolverDefault.generateNextStates(startState);
+
+    // // Rotate the cube
+    // cubeAlgo.rotateLayer(1, 1);
+    // std::vector<SolutionState> nextStatesAfterRotation = cubeSolverDefault.generateNextStates(startState);
+
+
+	// spawn a rubikscubeactor
+	UE_LOG(LogTemp, Warning, TEXT("ACubeAlgorithmTester::testSpawnRubiksCube start"));
+	double offset = 0;
+	for (auto& state : nextStates) {
+		UE_LOG(LogTemp, Warning, TEXT("STATE: %s"), *state.cubeGrid.ToString());
+
+		FTransform SpawnTransform(FRotator::ZeroRotator, FVector(0, offset, 1000), FVector(1.f, 1.f, 1.f));
+		ARubiksCubeActor* RubiksCube = GetWorld()->SpawnActorDeferred<ARubiksCubeActor>(ARubiksCubeActor::StaticClass(), SpawnTransform, nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+		if (!RubiksCube)
+		{
+			UE_LOG(LogTemp, Error, TEXT("ACubeAlgorithmTester::testSpawnRubiksCube failed!"));
+			return;
+		}
+		CubeAlgorithm newAlgo(this);
+		newAlgo.grid = state.cubeGrid;
+		RubiksCube->setAlgo(newAlgo);
+		UGameplayStatics::FinishSpawningActor(RubiksCube, SpawnTransform);
+
+		offset += 1000;
+		UE_LOG(LogTemp, Warning, TEXT("Rubiks: %s"), *RubiksCube->ToString());
+
+	}
 }
 
 void ACubeAlgorithmTester::DrawActorFacingLine(AStaticMeshActor *actor)

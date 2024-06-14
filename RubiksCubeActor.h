@@ -81,6 +81,7 @@ private:
 
 
 public:
+    void setAlgo(CubeAlgorithm algo);
     void StartRotation(int LayerIndex);
     void MaybeRotate(float DeltaTime);
     void DrawCubeFacingLine(FVector &EndPoint, AStaticMeshActor *CubeToRotate);
