@@ -147,11 +147,11 @@ void ARubiksCubeActor::BeginPlay()
     }
 
     for (auto rotation : AnimatedRotations) {
-        RotationsQueue.Enqueue(rotation);
+        RotationsQueue.Enqueue(CubeMove(abs(rotation), rotation >= 0 ? CLOCKWISE : COUNTERCLOCKWISE));
     }
     if (loopAnimation) {
         for (int i = AnimatedRotations.Num() - 1; i >= 0; i--) {
-            RotationsQueue.Enqueue(-AnimatedRotations[i]);
+            RotationsQueue.Enqueue(CubeMove(abs(AnimatedRotations[i]), AnimatedRotations[i] >= 0 ? COUNTERCLOCKWISE : CLOCKWISE));
         }
     }
 
@@ -213,18 +213,18 @@ void ARubiksCubeActor::MaybeRotate(float DeltaTime) {
     if (!bIsRotating) {
         if (!RotationsQueue.IsEmpty()) {
             UE_LOG(LogTemp, Error, TEXT("Rotating..."));
-            int dequeuedLayer = 0;
+            CubeMove dequeuedLayer(0, CLOCKWISE);
             if (!RotationsQueue.Dequeue(dequeuedLayer)) {
                 UE_LOG(LogTemp, Error, TEXT("RotationsQueue.Dequeue failed!"));
             }
-            StartRotation(dequeuedLayer);
+            StartRotation(dequeuedLayer.layer, dequeuedLayer.direction);
         } else {
             if (loopAnimation) {
                 for (auto rotation : AnimatedRotations) {
-                    RotationsQueue.Enqueue(rotation);
+                    RotationsQueue.Enqueue(CubeMove(abs(rotation), rotation >= 0 ? CLOCKWISE : COUNTERCLOCKWISE));
                 }
                 for (int i = AnimatedRotations.Num() - 1; i >= 0; i--) {
-                    RotationsQueue.Enqueue(-AnimatedRotations[i]);
+                    RotationsQueue.Enqueue(CubeMove(abs(AnimatedRotations[i]), AnimatedRotations[i] >= 0 ? COUNTERCLOCKWISE : CLOCKWISE));
                 }
             }
         }
@@ -309,14 +309,14 @@ void ARubiksCubeActor::DrawNormalLine(FVector &EndPoint, FVector &RotationCenter
 
 // In CubeActor.cpp
 
-void ARubiksCubeActor::StartRotation(int LayerIndex)
+void ARubiksCubeActor::StartRotation(int LayerIndex, int direction)
 {
     UE_LOG(LogTemp, Warning, TEXT("StartRotation: %d\t%lf"), LayerIndex, FPlatformTime::Seconds() - StartTime);
     if (!bIsRotating)
     {
         bIsRotating = true;
         LayerToRotate = abs(LayerIndex);
-        RotationAxis = LayerIndex < 0 ? -NormalsAtLayer[-LayerIndex] : NormalsAtLayer[LayerIndex];
+        RotationAxis = direction < 1 ? NormalsAtLayer[LayerIndex] : -NormalsAtLayer[LayerIndex];
         UE_LOG(LogTemp, Warning, TEXT("RotationAxis: %s"), *RotationAxis.ToString());
         float Duration = 0.25f;
         RotationSpeed = 90.0f / Duration; // Calculate speed based on duration

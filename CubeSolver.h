@@ -15,6 +15,7 @@ struct CubeMove {
     int layer;
     Direction direction;
 
+    CubeMove() : layer(0), direction(CLOCKWISE) {}
     CubeMove(int l, Direction d) : layer(l), direction(d) {}
 };
 

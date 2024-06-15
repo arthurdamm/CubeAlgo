@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "CubeAlgorithm.h"
+#include "CubeSolver.h"
 #include "CoreMinimal.h"
 #include "Engine/StaticMeshActor.h"
 #include "GameFramework/Actor.h"
@@ -64,7 +65,7 @@ public:
     std::vector<ACubeActor*> CubesVector;
     FVector NormalsAtLayer[9];
     FVector CentersAtLayer[9];
-    TQueue<int> RotationsQueue;
+    TQueue<CubeMove> RotationsQueue;
 
 
 
@@ -82,7 +83,7 @@ private:
 
 public:
     void setAlgo(CubeAlgorithm algo);
-    void StartRotation(int LayerIndex);
+    void StartRotation(int LayerIndex, int Direction=1);
     void MaybeRotate(float DeltaTime);
     void DrawCubeFacingLine(FVector &EndPoint, AStaticMeshActor *CubeToRotate);
     void DrawNormalLine(FVector &EndPoint, FVector &RotationCenter);
