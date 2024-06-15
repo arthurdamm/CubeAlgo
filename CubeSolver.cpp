@@ -14,6 +14,7 @@ CubeSolver::~CubeSolver() {
 }
 
 bool CubeSolver::solve(SolutionState& finalState) {
+    std::unordered_set<CubeGrid, GridHasher> visitedStates;
     std::queue<SolutionState> cubeGrids;
 
     SolutionState startState;
@@ -37,7 +38,11 @@ bool CubeSolver::solve(SolutionState& finalState) {
 
         // Add the next states to the queue
         for (SolutionState& nextState : nextStates) {
+            if (visitedStates.find(nextState.cubeGrid) != visitedStates.end()) {
+                continue;
+            }
             cubeGrids.push(nextState);
+            visitedStates.insert(nextState.cubeGrid);
         }
     }
     return false;
