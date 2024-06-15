@@ -39,7 +39,7 @@ public:
     ~CubeSolver();
 
     // Solves the cube
-    void solve();
+    bool solve(SolutionState& finalState);
 
     // Resets the cube to its initial state
     void reset();
@@ -50,3 +50,5 @@ public:
 
     std::vector<SolutionState> generateNextStates(SolutionState& solutionState);
 };
+
+void printSolutionState(SolutionState solutionState);

@@ -6,6 +6,7 @@ bool FCubeSolverTestBasic::RunTest(const FString& Parameters)
 
     TestCubeSolver.TestIsSolved(*this);
     TestCubeSolver.TestGenerateNextStates(*this);
+    TestCubeSolver.TestSolve(*this);
 
     return true;
 }
@@ -52,9 +53,36 @@ bool TestCubeSolver::TestGenerateNextStates(FAutomationTestBase& Test)
     startState.cubeGrid = cubeAlgo.grid;
     Test.TestEqual("GenerateNextStates After Rotation",
     filter(nextStatesAfterRotation, [startState](SolutionState state) {
-        UE_LOG(LogTemp, Warning, TEXT(">> %s"), *state.cubeGrid.ToString());
+        // UE_LOG(LogTemp, Warning, TEXT(">> %s"), *state.cubeGrid.ToString());
         return state.cubeGrid == startState.cubeGrid;
     }).size(), 1);
 
     return true;
 }
+
+bool TestCubeSolver::TestSolve(FAutomationTestBase& Test)
+{
+    AActor* dummyActor = NewObject<AActor>();
+    CubeAlgorithm cubeAlgo(dummyActor);
+    CubeSolver cubeSolverDefault(&cubeAlgo);
+
+    SolutionState solutionState;
+    bool result = cubeSolverDefault.solve(solutionState);
+    Test.TestTrue("Solve Default", result);
+    Test.TestEqual("Solve Default", solutionState.moves.size(), 0);
+
+    cubeAlgo.rotateLayer(0, 1);
+    cubeAlgo.rotateLayer(1, 1);
+    // print the cubeAlgo grid:
+    // UE_LOG(LogTemp, Warning, TEXT("cubeAlgo.grid: %s"), *cubeAlgo.grid.ToString());
+    CubeSolver cubeSolverOneRotation(&cubeAlgo);
+    SolutionState solutionStateOneRotation;
+    bool resultOneRotation = cubeSolverDefault.solve(solutionStateOneRotation);
+    Test.TestTrue("Solve one rotation", resultOneRotation);
+    Test.TestEqual("Solve one rotation", solutionStateOneRotation.moves.size(), 1);
+
+    // printSolutionState(solutionStateOneRotation);
+
+    return true;
+}
+

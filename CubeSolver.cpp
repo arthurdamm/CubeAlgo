@@ -13,10 +13,11 @@ CubeSolver::~CubeSolver() {
     // Add your code here
 }
 
-void CubeSolver::solve() {
+bool CubeSolver::solve(SolutionState& finalState) {
     std::queue<SolutionState> cubeGrids;
 
     SolutionState startState;
+    startState.cubeGrid = this->cubeAlgo->grid;
     cubeGrids.push(startState);
 
     while (!cubeGrids.empty()) {
@@ -25,7 +26,10 @@ void CubeSolver::solve() {
 
         if (isSolved(currentGrid.cubeGrid)) {
             // If it is, we've found a solution
-            break;
+            finalState = currentGrid;
+            // UE_LOG(LogTemp, Display, TEXT("SOLVED!"));
+            // printSolutionState(currentGrid);
+            return true;
         }
 
         // Generate all possible next states from the current grid
@@ -36,6 +40,7 @@ void CubeSolver::solve() {
             cubeGrids.push(nextState);
         }
     }
+    return false;
 }
 
 std::vector<SolutionState> CubeSolver::generateNextStates(SolutionState& currentState)
@@ -80,6 +85,13 @@ bool CubeSolver::isSolved(const CubeGrid &cubeGrid) {
 bool CubeSolver::isSolved() {
     return isSolved(this->cubeAlgo->grid);
     return false;
+}
+
+void printSolutionState(SolutionState solutionState) {
+    UE_LOG(LogTemp, Warning, TEXT("Solution State: %s"), *solutionState.cubeGrid.ToString());
+    for (CubeMove move : solutionState.moves) {
+        UE_LOG(LogTemp, Warning, TEXT("Layer: %d, Direction: %d"), move.layer, move.direction);
+    }
 }
 
 /*
