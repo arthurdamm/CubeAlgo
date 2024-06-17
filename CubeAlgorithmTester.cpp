@@ -30,7 +30,7 @@ void ACubeAlgorithmTester::BeginPlay()
 	
 	
 	addAlgo(&algo1);
-	testSpawnRubiksCube();
+	testSpawnCustomRubiksCube();
 	// testRotateLayer0();
 	// testQuatRotation();
 	// testQuatRotationRelative();
@@ -222,6 +222,27 @@ void ACubeAlgorithmTester::testSpawnRubiksCube()
 		UE_LOG(LogTemp, Warning, TEXT("Rubiks: %s"), *RubiksCube->ToString());
 
 	}
+}
+
+void ACubeAlgorithmTester::testSpawnCustomRubiksCube()
+{
+	CubeGrid grid = GetMyCubeGrid();
+	CubeAlgorithm cubeAlgo(grid);
+    CubeSolver cubeSolverDefault(&cubeAlgo);
+
+
+	FTransform SpawnTransform(FRotator::ZeroRotator, FVector(0, 0, 1000), FVector(1.f, 1.f, 1.f));
+	ARubiksCubeActor* RubiksCube = GetWorld()->SpawnActorDeferred<ARubiksCubeActor>(ARubiksCubeActor::StaticClass(), SpawnTransform, nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	if (!RubiksCube)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ACubeAlgorithmTester::testSpawnRubiksCube failed!"));
+		return;
+	}
+	RubiksCube->setAlgo(cubeAlgo);
+	UGameplayStatics::FinishSpawningActor(RubiksCube, SpawnTransform);
+
+	UE_LOG(LogTemp, Warning, TEXT("Rubiks: %s"), *RubiksCube->ToString());
+
 }
 
 void ACubeAlgorithmTester::DrawActorFacingLine(AStaticMeshActor *actor)

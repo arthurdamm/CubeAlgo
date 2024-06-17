@@ -185,3 +185,71 @@ bool CubeAlgorithm::operator==(const CubeAlgorithm& other) const {
     }
     return true;
 }
+
+CubeGrid GetMyCubeGrid() {
+    CubeGrid grid;
+    grid.cubes[0][0][0].orientation = FQuat(-FVector(0, 1, 0), PI / 2) * grid.cubes[0][0][0].orientation;
+
+	grid.cubes[0][1][0].orientation = FQuat(FVector(0, 0, 1), PI / 2) * grid.cubes[0][1][0].orientation;
+	grid.cubes[0][1][0].orientation = FQuat(FVector(1, 0, 0), PI / 1) * grid.cubes[0][1][0].orientation;
+
+	grid.cubes[0][2][0].orientation = FQuat(-FVector(0, 0, 1), PI / 1) * grid.cubes[0][2][0].orientation;
+	grid.cubes[0][2][0].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[0][2][0].orientation;
+
+	grid.cubes[0][0][1].orientation = FQuat(FVector(0, 1, 0), PI / 2) * grid.cubes[0][0][1].orientation;
+
+	grid.cubes[0][2][1].orientation = FQuat(FVector(0, 0, 1), PI / 2) * grid.cubes[0][2][1].orientation;
+	grid.cubes[0][2][1].orientation = FQuat(FVector(1, 0, 0), PI / 1) * grid.cubes[0][2][1].orientation;
+
+	grid.cubes[0][0][2].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[0][0][2].orientation;
+	grid.cubes[0][0][2].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[0][0][2].orientation;
+
+	grid.cubes[0][1][2].orientation = FQuat(FVector(0, 1, 0), PI / 2) * grid.cubes[0][1][2].orientation;
+
+	grid.cubes[0][2][2].orientation = FQuat(FVector(0, 0, 1), PI / 2) * grid.cubes[0][2][2].orientation;
+	grid.cubes[0][2][2].orientation = FQuat(FVector(1, 0, 0), PI / 1) * grid.cubes[0][2][2].orientation;
+
+	grid.cubes[1][0][0].orientation = FQuat(FVector(0, 0, 1), PI / 1) * grid.cubes[1][0][0].orientation;
+	grid.cubes[1][0][0].orientation = FQuat(-FVector(0, 1, 0), PI / 2) * grid.cubes[1][0][0].orientation;
+
+	grid.cubes[1][0][1].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[1][0][1].orientation;
+
+	grid.cubes[1][0][2].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[1][0][2].orientation;
+	grid.cubes[1][0][2].orientation = FQuat(FVector(0, 1, 0), PI / 2) * grid.cubes[1][0][2].orientation;
+
+	grid.cubes[1][1][2].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[1][1][2].orientation;
+
+	grid.cubes[1][1][0].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[1][1][0].orientation;
+
+	grid.cubes[1][2][0].orientation = FQuat(FVector(0, 0, 1), PI / 2) * grid.cubes[1][2][0].orientation;
+	grid.cubes[1][2][0].orientation = FQuat(FVector(0, 1, 0), PI / 1) * grid.cubes[1][2][0].orientation;
+
+	grid.cubes[1][2][1].orientation = FQuat(-FVector(1, 0, 0), PI / 2) * grid.cubes[1][2][1].orientation;
+
+	grid.cubes[1][2][2].orientation = FQuat(FVector(0, 1, 0), PI / 2) * grid.cubes[1][2][2].orientation;
+	grid.cubes[1][2][2].orientation = FQuat(FVector(0, 0, 1), PI / 1) * grid.cubes[1][2][2].orientation;
+
+	grid.cubes[2][2][2].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[2][2][2].orientation;
+	grid.cubes[2][2][2].orientation = FQuat(FVector(0, 1, 0), PI / 1) * grid.cubes[2][2][2].orientation;
+
+	grid.cubes[2][2][1].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[2][2][1].orientation;
+	grid.cubes[2][2][1].orientation = FQuat(FVector(1, 0, 0), PI / 2) * grid.cubes[2][2][1].orientation;
+
+	grid.cubes[2][2][0].orientation = FQuat(FVector(0, 1, 0), PI / 1) * grid.cubes[2][2][0].orientation;
+
+	grid.cubes[2][1][0].orientation = FQuat(FVector(0, 1, 0), PI / 1) * grid.cubes[2][1][0].orientation;
+	grid.cubes[2][1][0].orientation = FQuat(FVector(0, 0, 1), PI / 2) * grid.cubes[2][1][0].orientation;
+
+	grid.cubes[2][1][2].orientation = FQuat(FVector(0, 0, 1), PI / 1) * grid.cubes[2][1][2].orientation;
+
+	grid.cubes[2][0][0].orientation = FQuat(FVector(0, 1, 0), PI / 2) * grid.cubes[2][0][0].orientation;
+	grid.cubes[2][0][0].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[2][0][0].orientation;
+
+	grid.cubes[2][0][1].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[2][0][1].orientation;
+	grid.cubes[2][0][1].orientation = FQuat(-FVector(0, 1, 0), PI / 2) * grid.cubes[2][0][1].orientation;
+
+	grid.cubes[2][0][2].orientation = FQuat(-FVector(0, 0, 1), PI / 2) * grid.cubes[2][0][2].orientation;
+	grid.cubes[2][0][2].orientation = FQuat(-FVector(0, 1, 0), PI / 2) * grid.cubes[2][0][2].orientation;
+
+    return grid;
+}

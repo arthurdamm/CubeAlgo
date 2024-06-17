@@ -14,7 +14,7 @@ class CUBEALGO_API CubeAlgorithm
 {
 private:
     // The actor associated with this CubeAlgorithm
-    AActor* actor;
+    AActor* actor = nullptr;
 
     // The centers of each layer used for rotation
     FVector centersByLayer[LAYERS];
@@ -60,3 +60,5 @@ public:
     bool operator==(const CubeAlgorithm& other) const;
 
 };
+
+CubeGrid GetMyCubeGrid();

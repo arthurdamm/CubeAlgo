@@ -13,7 +13,7 @@
 #include "CubeActor.h"
 #include "RubiksCubeActor.generated.h"
 
-#define CUBE_MESH TEXT("StaticMesh'/Game/SM_RubiksCube.SM_RubiksCube'")
+#define CUBE_MESH TEXT("StaticMesh'/Game/SM_RubiksCube-new.SM_RubiksCube-new'")
 
 #define CUBE_EDGE_LENGTH 210.0f
 

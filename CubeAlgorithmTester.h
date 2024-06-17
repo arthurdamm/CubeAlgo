@@ -37,6 +37,7 @@ public:
 	void testQuatRotationRelative();
 	void testQuatRotationEuclid();
 	void testSpawnRubiksCube();
+	void testSpawnCustomRubiksCube();
 
 	ACubeActor* spawnCube(FVector location=FVector(0, 0, 0), FVector facing=FVector(1, 0 , 0), FRotator rotation=FRotator(0, 0, 0));
 	void DrawActorFacingLine(AStaticMeshActor *actor);
